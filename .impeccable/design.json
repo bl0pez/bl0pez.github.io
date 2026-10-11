@@ -1,0 +1,142 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-10-11T00:00:00.000Z",
+  "title": "Design System: Bryan López Portfolio",
+  "extensions": {
+    "colorMeta": {
+      "bg": { "role": "neutral", "displayName": "Cool Paper", "canonical": "#eef1f0", "tonalRamp": ["#12171a", "#2a3235", "#535e64", "#8a9599", "#b8c0c2", "#dce1e2", "#eef1f0", "#f7f9f8"] },
+      "tile": { "role": "neutral", "displayName": "Tile White", "canonical": "#ffffff", "tonalRamp": ["#161c1f", "#3a4347", "#6b767a", "#9aa4a7", "#c6cdcf", "#e3e7e8", "#f3f5f5", "#ffffff"] },
+      "ink": { "role": "neutral", "displayName": "Ink", "canonical": "#12171a", "tonalRamp": ["#12171a", "#232a2e", "#364045", "#535e64", "#7a868c", "#a3adb1", "#cdd3d5", "#edf2f1"] },
+      "muted": { "role": "neutral", "displayName": "Muted Slate", "canonical": "#535e64", "tonalRamp": ["#1d2428", "#2f393e", "#404b51", "#535e64", "#6f7a80", "#8c979c", "#b0b8bc", "#d5dadc"] },
+      "line": { "role": "neutral", "displayName": "Hairline", "canonical": "#dce1e2", "tonalRamp": ["#263035", "#4a565b", "#76828a", "#a1abb0", "#c0c8ca", "#dce1e2", "#eaeded", "#f4f6f6"] },
+      "cyan": { "role": "primary", "displayName": "Logo Cyan", "canonical": "#03a9d4", "tonalRamp": ["#02394a", "#025a75", "#02739a", "#038db6", "#03a9d4", "#4fc6ea", "#9fe0f3", "#d4f2fa"] },
+      "green": { "role": "primary", "displayName": "Logo Green", "canonical": "#5db12f", "tonalRamp": ["#1c3a0c", "#2b5712", "#3a7a19", "#4a9524", "#5db12f", "#8ad263", "#b9e69c", "#e0f4d3"] },
+      "cyan-ink": { "role": "primary", "displayName": "Cyan Ink", "canonical": "#02739a", "tonalRamp": ["#02394a", "#025168", "#02739a", "#038db6", "#03a9d4", "#4fc6ea", "#9fe0f3", "#d4f2fa"] },
+      "green-ink": { "role": "primary", "displayName": "Green Ink", "canonical": "#3a7a19", "tonalRamp": ["#1c3a0c", "#2b5712", "#3a7a19", "#4a9524", "#5db12f", "#8ad263", "#b9e69c", "#e0f4d3"] },
+      "on-brand": { "role": "neutral", "displayName": "On Brand", "canonical": "#0c1a13", "tonalRamp": ["#0c1a13", "#17302a", "#244a3d", "#356656", "#4d8470", "#76a592", "#a6c7b9", "#d6e6df"] }
+    },
+    "typographyMeta": {
+      "display": { "displayName": "Display", "purpose": "Hero h1 and contact band h2, weight 800, tight tracking." },
+      "headline": { "displayName": "Headline", "purpose": "Section titles, max 20ch." },
+      "title": { "displayName": "Title", "purpose": "Problem, service and step headings." },
+      "body": { "displayName": "Body", "purpose": "Running copy and lead paragraphs at 16px+." },
+      "label": { "displayName": "Label", "purpose": "Stack chips, captions, definition terms." }
+    },
+    "shadows": [
+      { "name": "media-soft", "value": "0 18px 50px rgb(18 40 48 / 0.10)", "purpose": "Case screenshots only; dark theme uses rgb(0 0 0 / 0.35). Tiles carry no shadow." }
+    ],
+    "motion": [
+      { "name": "ease-out", "value": "cubic-bezier(0.23, 1, 0.32, 1)", "purpose": "Settle animation, button press, image hover scale." },
+      { "name": "settle", "value": "700ms ease-out, from opacity .35 / translateY(18px) / scale(.985) / blur(4px); stagger 0/70/140/210ms", "purpose": "The single load moment for the hero bento; only under prefers-reduced-motion: no-preference." },
+      { "name": "hover-scale", "value": "scale(1.03) tiles, scale(1.02) case media, 600ms", "purpose": "Gated to (hover: hover) and (pointer: fine)." }
+    ],
+    "breakpoints": [
+      { "name": "tablet", "value": "1099px" },
+      { "name": "phone", "value": "767px" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Ink pill; the one contact action, always labelled Escríbeme.",
+      "html": "<a class=\"ds-btn ds-btn-primary\" href=\"#\">Escríbeme</a>",
+      "css": ".ds-btn { display: inline-flex; align-items: center; gap: 10px; font-family: 'Geist Variable', system-ui, sans-serif; font-weight: 600; font-size: 1.0625rem; line-height: 1; text-decoration: none; padding: 15px 22px; border-radius: 999px; border: 1.5px solid transparent; transition: transform 160ms cubic-bezier(0.23,1,0.32,1), background-color 200ms ease; } .ds-btn-primary { background: var(--color-ink, #12171a); color: var(--color-bg, #eef1f0); } .ds-btn-primary:hover { background: color-mix(in oklab, var(--color-ink, #12171a) 86%, #03a9d4); } .ds-btn:active { transform: scale(0.97); } .ds-btn:focus-visible { outline: 3px solid #03a9d4; outline-offset: 3px; }"
+    },
+    {
+      "name": "Ghost Button",
+      "kind": "button",
+      "refersTo": "button-ghost",
+      "description": "Secondary pill with hairline border, for navigation actions like Ver trabajos.",
+      "html": "<a class=\"ds-btn-ghost\" href=\"#\">Ver trabajos</a>",
+      "css": ".ds-btn-ghost { display: inline-flex; align-items: center; font-family: 'Geist Variable', system-ui, sans-serif; font-weight: 600; font-size: 1.0625rem; line-height: 1; text-decoration: none; padding: 15px 22px; border-radius: 999px; border: 1.5px solid var(--color-line, #dce1e2); color: var(--color-ink, #12171a); background: transparent; transition: border-color 200ms ease, transform 160ms cubic-bezier(0.23,1,0.32,1); } .ds-btn-ghost:hover { border-color: var(--color-ink, #12171a); } .ds-btn-ghost:active { transform: scale(0.97); } .ds-btn-ghost:focus-visible { outline: 3px solid #03a9d4; outline-offset: 3px; }"
+    },
+    {
+      "name": "Screenshot Tile",
+      "kind": "card",
+      "refersTo": "tile",
+      "description": "Real screenshot filling a 24px tile with a white caption strip.",
+      "html": "<a class=\"ds-shot\" href=\"#\"><div class=\"ds-shot-img\"></div><span class=\"ds-cap\"><strong>TeamLobo</strong><span>Club de boxeo amateur en Arica</span></span></a>",
+      "css": ".ds-shot { display: flex; flex-direction: column; width: 320px; height: 240px; background: var(--color-tile, #fff); border-radius: 24px; overflow: hidden; text-decoration: none; color: var(--color-ink, #12171a); font-family: 'Geist Variable', system-ui, sans-serif; } .ds-shot-img { flex: 1; background: linear-gradient(135deg, #dce1e2, #eef1f0); } .ds-cap { display: flex; align-items: baseline; flex-wrap: wrap; gap: 2px 10px; padding: 14px 20px 16px; background: var(--color-tile, #fff); line-height: 1.3; } .ds-cap strong { font-weight: 700; } .ds-cap span { font-size: 0.9375rem; color: var(--color-muted, #535e64); }"
+    },
+    {
+      "name": "Service Tile",
+      "kind": "card",
+      "refersTo": "tile-service",
+      "description": "White tile with a green-ink icon beside title and muted description.",
+      "html": "<div class=\"ds-svc\"><svg width=\"28\" height=\"28\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\"><path d=\"M216 40H40a16 16 0 0 0-16 16v144a16 16 0 0 0 16 16h176a16 16 0 0 0 16-16V56a16 16 0 0 0-16-16Zm0 32H40V56h176Z\"/></svg><h3>Páginas web</h3><p>Rápidas, claras y hechas para el celular.</p></div>",
+      "css": ".ds-svc { display: grid; grid-template-columns: auto 1fr; column-gap: 18px; align-items: start; padding: 28px 30px; background: var(--color-tile, #fff); border-radius: 24px; font-family: 'Geist Variable', system-ui, sans-serif; color: var(--color-ink, #12171a); } .ds-svc svg { grid-row: span 2; color: var(--color-green-ink, #3a7a19); margin-top: 2px; } .ds-svc h3 { margin: 0; font-size: 1.375rem; font-weight: 700; letter-spacing: -0.015em; } .ds-svc p { margin: 6px 0 0; color: var(--color-muted, #535e64); }"
+    },
+    {
+      "name": "Automation Tile",
+      "kind": "card",
+      "refersTo": "tile-automation",
+      "description": "The brand-gradient tile; one of the two places the gradient is allowed.",
+      "html": "<div class=\"ds-auto\"><h3>Automatización con n8n</h3><p>Conecto tus herramientas para que el trabajo repetitivo se haga solo.</p><ul><li>Bots de WhatsApp que responden y agendan</li><li>Lectura y análisis automático de PDF</li></ul></div>",
+      "css": ".ds-auto { display: flex; flex-direction: column; width: 360px; padding: 32px; background: linear-gradient(120deg, #03a9d4 0%, #2fb07f 55%, #5db12f 100%); color: #0c1a13; border-radius: 24px; font-family: 'Geist Variable', system-ui, sans-serif; } .ds-auto h3 { margin: 0; font-size: 1.875rem; font-weight: 800; letter-spacing: -0.03em; line-height: 1.05; } .ds-auto p { margin: 10px 0 0; font-size: 1.125rem; font-weight: 500; } .ds-auto ul { list-style: none; padding: 28px 0 0; margin: 0; display: grid; gap: 14px; font-weight: 600; } .ds-auto li { padding-top: 14px; border-top: 1px solid rgb(12 26 19 / 0.18); }"
+    },
+    {
+      "name": "Problem List Item",
+      "kind": "custom",
+      "refersTo": "body",
+      "description": "Hairline-topped item: bold problem title, muted fix. No card, no icon.",
+      "html": "<div class=\"ds-problem\"><h3>Tarda en cargar</h3><p>Quien llega desde Google Maps se va si la página no abre rápido.</p></div>",
+      "css": ".ds-problem { padding: 26px 0; border-top: 1px solid var(--color-line, #dce1e2); font-family: 'Geist Variable', system-ui, sans-serif; color: var(--color-ink, #12171a); max-width: 420px; } .ds-problem h3 { margin: 0; font-size: 1.25rem; font-weight: 700; letter-spacing: -0.01em; } .ds-problem p { margin: 6px 0 0; color: var(--color-muted, #535e64); }"
+    },
+    {
+      "name": "Stack Chip",
+      "kind": "chip",
+      "refersTo": "chip-stack",
+      "description": "Small white pill with hairline border listing a technology.",
+      "html": "<span class=\"ds-chip\">Next.js</span>",
+      "css": ".ds-chip { display: inline-block; font-family: 'Geist Variable', system-ui, sans-serif; font-size: 0.875rem; font-weight: 600; padding: 6px 12px; border-radius: 999px; background: var(--color-tile, #fff); border: 1px solid var(--color-line, #dce1e2); color: var(--color-ink, #12171a); }"
+    },
+    {
+      "name": "Process Step",
+      "kind": "custom",
+      "refersTo": "step-number",
+      "description": "Ink numbered circle over a bold title and muted line.",
+      "html": "<div class=\"ds-step\"><span class=\"ds-step-n\">1</span><h3>Conversamos</h3><p>Me cuentas por WhatsApp qué necesita tu negocio.</p></div>",
+      "css": ".ds-step { font-family: 'Geist Variable', system-ui, sans-serif; color: var(--color-ink, #12171a); max-width: 260px; } .ds-step-n { display: inline-grid; place-items: center; width: 36px; height: 36px; border-radius: 999px; background: var(--color-ink, #12171a); color: var(--color-bg, #eef1f0); font-weight: 700; font-variant-numeric: tabular-nums; } .ds-step h3 { margin: 16px 0 0; font-size: 1.375rem; font-weight: 700; letter-spacing: -0.015em; } .ds-step p { margin: 6px 0 0; color: var(--color-muted, #535e64); }"
+    },
+    {
+      "name": "Contact Band",
+      "kind": "custom",
+      "refersTo": "contact-band",
+      "description": "Gradient closing band with the single Escríbeme pill and email link.",
+      "html": "<div class=\"ds-contact\"><h2>¿Conversamos sobre tu negocio?</h2><p>Cuéntame qué necesitas y te digo cómo lo haría.</p><a class=\"ds-contact-btn\" href=\"#\">Escríbeme</a></div>",
+      "css": ".ds-contact { padding: 48px; border-radius: 24px; background: linear-gradient(120deg, #03a9d4 0%, #2fb07f 55%, #5db12f 100%); color: #0c1a13; font-family: 'Geist Variable', system-ui, sans-serif; } .ds-contact h2 { margin: 0; max-width: 14ch; font-weight: 800; font-size: 2.5rem; line-height: 0.98; letter-spacing: -0.04em; } .ds-contact p { margin: 18px 0 0; font-size: 1.25rem; font-weight: 500; max-width: 44ch; } .ds-contact-btn { display: inline-flex; margin-top: 28px; padding: 15px 22px; border-radius: 999px; background: #0c1a13; color: #fff; font-weight: 600; text-decoration: none; } .ds-contact-btn:focus-visible { outline: 3px solid #0c1a13; outline-offset: 3px; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Tidy Bento Board",
+    "overview": "A cool off-white board of white 24px tiles, ink text and real screenshots as tile fill. Few projects read as plenty because services, cases and contact all sit on one grid. It refuses the dark developer portfolio with a wall of thumbnails. The voice is plain and friendly; the structure does the persuading.\n\nThe logo's cyan-to-green gradient is the only saturated color and appears on exactly two surfaces. Everything else is neutral, so the gradient reads as the place to act or look. Light is the primary theme; a dark theme follows the system setting.",
+    "keyCharacteristics": [
+      "One shape for actions (pill), one shape for surfaces (24px tile).",
+      "Geist Variable only; hierarchy comes from weight 800 headings with tight tracking.",
+      "One motion moment: the hero bento settles in on load.",
+      "No eyebrows, no italic headings, no decorative icons in headings."
+    ],
+    "rules": [
+      { "name": "The Two Surfaces Rule", "body": "The gradient appears only on the automation tile and the contact band. Never on headers, buttons, text or other tiles.", "section": "colors" },
+      { "name": "The Ink Variant Rule", "body": "Raw cyan and green are for fills, the focus ring and the logo mark. Colored text and icons use the Cyan Ink and Green Ink tokens.", "section": "colors" },
+      { "name": "The Upright Rule", "body": "Headings are never italic (font-style: normal on h1 to h3), always text-wrap: balance.", "section": "typography" },
+      { "name": "The Flat Tile Rule", "body": "Tiles never carry shadows. Only screenshots shown outside a tile get the soft shadow.", "section": "elevation" }
+    ],
+    "dos": [
+      "Do use the label \"Escríbeme\" for every contact-intent button (header, hero, contact band).",
+      "Do keep the gradient on the automation tile and contact band only.",
+      "Do use 24px tiles, 999px pills and nothing in between for surfaces and actions.",
+      "Do gate hover transforms to fine pointers and keep motion to the single load settle.",
+      "Do use Cyan Ink and Green Ink for colored text and icons so contrast holds in both themes."
+    ],
+    "donts": [
+      "Don't add eyebrows, kickers or small uppercase labels above headings.",
+      "Don't set headings in italic.",
+      "Don't put shadows on tiles or gradients on buttons, text or headings.",
+      "Don't introduce a second typeface or a second button shape.",
+      "Don't replace real screenshots with illustration or generic icon art."
+    ]
+  }
+}

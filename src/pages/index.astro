@@ -330,8 +330,10 @@ const steps = [
     transition: color 200ms ease;
   }
 
-  .nav a:hover {
-    color: var(--color-ink);
+  @media (hover: hover) and (pointer: fine) {
+    .nav a:hover {
+      color: var(--color-ink);
+    }
   }
 
   .btn-sm {
@@ -717,7 +719,7 @@ const steps = [
 
   .contact .btn-primary {
     background: var(--color-on-brand);
-    color: var(--color-tile);
+    color: var(--color-on-dark);
   }
 
   .contact-mail {
