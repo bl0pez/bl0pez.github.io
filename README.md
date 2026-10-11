@@ -3,7 +3,7 @@
 Sitio de presentación: webs, apps y automatizaciones con n8n para negocios en Chile.
 
 - Hecho con [Astro](https://astro.build), sin JavaScript en el cliente.
-- Se publica solo en GitHub Pages con cada push a `main` (`.github/workflows/deploy.yml`).
+- Se publica en https://blopezdev.com (GitHub Pages) con cada push a `main` (`.github/workflows/deploy.yml`).
 
 ## Desarrollo
 
