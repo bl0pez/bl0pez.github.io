@@ -186,6 +186,7 @@ const config = {
     </div>
   </div>
 
+  <p class="try-ts-hint" data-ts-hint hidden>Confirma que eres una persona marcando la casilla y la demo sigue sola.</p>
   <div class="try-ts" data-ts-box></div>
 
   <template data-icons>
@@ -230,6 +231,13 @@ const config = {
 
   .try-ts:has(iframe) {
     margin-top: 16px;
+  }
+
+  .try-ts-hint {
+    margin-top: 20px;
+    text-align: center;
+    font-weight: 600;
+    color: var(--color-ink);
   }
 
   .try-tile {
@@ -1017,6 +1025,7 @@ const config = {
 
     /* ---------- Turnstile (se carga en la primera interacción) ---------- */
     const tsBox = root.querySelector<HTMLElement>('[data-ts-box]')!;
+    const tsHint = root.querySelector<HTMLElement>('[data-ts-hint]')!;
     const tsWin = window as unknown as { turnstile?: TurnstileApi };
     let scriptPromise: Promise<void> | null = null;
     let widgetId: string | undefined;
@@ -1073,6 +1082,12 @@ const config = {
         // Si Cloudflare pide marcar la casilla, damos tiempo; si no, cortamos rápido.
         'before-interactive-callback': () => {
           extendWait?.();
+          tsHint.hidden = false;
+          const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+          tsBox.scrollIntoView({ block: 'center', behavior: reduce ? 'auto' : 'smooth' });
+        },
+        'after-interactive-callback': () => {
+          tsHint.hidden = true;
         },
       });
     }
