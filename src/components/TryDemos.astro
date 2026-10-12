@@ -1070,8 +1070,14 @@ const config = {
             w.reject(new ApiError(0, MSG_TURNSTILE, true));
           }
         },
+        // Si Cloudflare pide marcar la casilla, damos tiempo; si no, cortamos rápido.
+        'before-interactive-callback': () => {
+          extendWait?.();
+        },
       });
     }
+
+    let extendWait: (() => void) | null = null;
 
     async function takeToken(): Promise<string> {
       await ensureWidget();
@@ -1082,17 +1088,27 @@ const config = {
         return t;
       }
       return new Promise<string>((resolve, reject) => {
-        const timer = window.setTimeout(() => {
+        const fail = () => {
           waiter = null;
+          extendWait = null;
+          needsReset = true;
           reject(new ApiError(0, MSG_TURNSTILE, true));
-        }, 120000);
+        };
+        // 15 s para la verificación invisible; 2 minutos si aparece la casilla.
+        let timer = window.setTimeout(fail, 15000);
+        extendWait = () => {
+          clearTimeout(timer);
+          timer = window.setTimeout(fail, 120000);
+        };
         waiter = {
           resolve: (t) => {
             clearTimeout(timer);
+            extendWait = null;
             resolve(t);
           },
           reject: (e) => {
             clearTimeout(timer);
+            extendWait = null;
             reject(e);
           },
         };
