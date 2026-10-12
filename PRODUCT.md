@@ -41,10 +41,11 @@ Name: Bryan López. Handle: bl0pez. Email: bryanlopezdev@gmail.com (to be replac
 
 Approved for publication:
 - SuperaFit, gym management platform (superafit.com). Plans, routines and member tracking. Next.js, NestJS, Prisma, Google OAuth.
-- ShopYA, multi-vendor marketplace for small sellers in Argentina (shopya.com.ar). Role: backend collaborator. NestJS, Mercado Pago, OCA shipping, Firebase.
+- ShopYA, multi-vendor B2B/B2C marketplace in Argentina (shopya.com.ar), 250k+ users and about 5k monthly orders (user-supplied CV figures). Roles: Semi Senior Full Stack (Sep 2022), Senior Full Stack with tech lead duties for ~5 devs (May 2023), AI Engineer (May 2025 to present): MCP integration letting ChatGPT and Claude manage products, inventory, orders and prices; RAG and agentic workflows. Integrations: Mercado Pago, OCA, Andreani, Correo Argentino.
+- Acorde a Vos, online lingerie store in Argentina (acordeavos.com). Role: Full Stack Developer (May 2021 to May 2022); built the complete checkout with payments and shipping. React, Node.js, GCP.
 - TeamLobo, amateur boxing club in Arica (teamlobo.fit): landing page with free-class signup, schedules, plans and WhatsApp button, plus management platform. Next.js, Supabase. A real local client: the strongest proof for local business owners. Never link teamlobo.cl (now an unrelated gambling site).
 - Fidelilocal: discontinued by the user. Never mention it.
-- Real screenshots of the live sites: `.impeccable/mocks/decision/shots/` (superafit.com, shopya.com.ar, teamlobo.fit).
+- Real screenshots of the live sites: `.impeccable/mocks/decision/shots/` (superafit.com, shopya.com.ar, teamlobo.fit) and src/assets/projects/acordeavos.com.png.
 - n8n automations: offered as a service; no publishable case study yet.
 - Phone/WhatsApp: +56 9 9487 9144. GitHub: github.com/bl0pez. LinkedIn: linkedin.com/in/bryan-lopez-sanchez.
 
@@ -56,7 +57,7 @@ Not approved, never publish or invent: hospital employment, testimonials, client
 2. Every claim must be verifiable by a link.
 3. Contact is always one tap away, especially on mobile.
 4. The site must score excellently on mobile speed; it is part of the pitch.
-5. Honest scope: say "colaborador backend" where that was the role.
+5. Honest scope: state each role as the user's CV states it.
 
 ## Accessibility & Inclusion
 

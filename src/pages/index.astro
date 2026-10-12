@@ -5,6 +5,7 @@ import Icon from '../components/Icon.astro';
 import teamlobo from '../assets/projects/teamlobo.fit.png';
 import superafit from '../assets/projects/superafit.com.png';
 import shopya from '../assets/projects/shopya.com.ar.png';
+import acordeavos from '../assets/projects/acordeavos.com.png';
 
 const whatsapp =
   'https://wa.me/56994879144?text=' +
@@ -85,15 +86,28 @@ const cases = [
   {
     id: 'shopya',
     name: 'ShopYA',
-    kind: 'Marketplace de tiendas para emprendedores en Argentina',
+    kind: 'Marketplace con más de 250 mil usuarios en Argentina',
     url: 'https://shopya.com.ar',
     host: 'shopya.com.ar',
     focus: 'center 30%',
     image: shopya,
     alt: 'Página de inicio de ShopYA con el anuncio "Crea tu tienda online" y sus planes',
-    need: 'Muchos vendedores en una misma plataforma, cada uno con sus pagos y sus envíos.',
-    did: 'Colaboré en el backend: integración de pagos con Mercado Pago, envíos con OCA y la API de productos de cada vendedor.',
-    stack: ['NestJS', 'PostgreSQL', 'Mercado Pago', 'Firebase'],
+    need: 'Miles de vendedores en una misma plataforma, cada uno con sus pagos, sus envíos y su propia tienda que administrar.',
+    did: 'Como desarrollador full stack senior lideré pagos con Mercado Pago y envíos con OCA, Andreani y Correo Argentino. Hoy, como AI Engineer, construí la integración que permite administrar una tienda desde ChatGPT o Claude: productos, inventario, pedidos y precios con instrucciones en lenguaje natural.',
+    stack: ['NestJS', 'Next.js', 'PostgreSQL', 'Mercado Pago', 'MCP', 'IA'],
+  },
+  {
+    id: 'acordeavos',
+    name: 'Acorde a Vos',
+    kind: 'Tienda online de lencería en Argentina',
+    url: 'https://acordeavos.com',
+    host: 'acordeavos.com',
+    focus: 'left top',
+    image: acordeavos,
+    alt: 'Página de inicio de Acorde a Vos con el titular "Lencería que te hace sentir increíble" y una foto de conjuntos',
+    need: 'Vender en todo el país sin errores de precios, stock ni envíos al momento de pagar.',
+    did: 'Desarrollé el checkout completo: carrito, lógica de precios, validación de pedidos e integración de pagos y envíos.',
+    stack: ['React', 'Node.js', 'GCP'],
   },
 ];
 
@@ -144,7 +158,7 @@ const steps = [
       </div>
 
       {
-        cases.map((c, i) => (
+        cases.slice(0, 3).map((c, i) => (
           <a class={`tile shot shot-${i + 1}`} href={`#${c.id}`} style={`--focus: ${c.focus}`}>
             <Image
               src={c.image}
