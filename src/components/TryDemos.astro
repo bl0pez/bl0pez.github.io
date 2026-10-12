@@ -186,7 +186,7 @@ const config = {
     </div>
   </div>
 
-  <div class="try-ts" data-ts-box aria-hidden="true"></div>
+  <div class="try-ts" data-ts-box></div>
 
   <template data-icons>
     {icons.map((n) => <span data-icon={n}><Icon name={n} size={20} /></span>)}
@@ -222,13 +222,14 @@ const config = {
     height: 1.25em;
   }
 
+  /* Turnstile en modo "solo si hace falta": no ocupa espacio salvo cuando pide marcar la casilla. */
   .try-ts {
-    position: absolute;
-    left: 0;
-    bottom: 0;
-    width: 0;
-    height: 0;
-    overflow: hidden;
+    display: flex;
+    justify-content: center;
+  }
+
+  .try-ts:has(iframe) {
+    margin-top: 16px;
   }
 
   .try-tile {
@@ -1045,6 +1046,8 @@ const config = {
       if (!tsWin.turnstile) throw new ApiError(0, MSG_TURNSTILE, true);
       widgetId = tsWin.turnstile.render(tsBox, {
         sitekey: config.siteKey,
+        appearance: 'interaction-only',
+        language: 'es',
         callback: (token: string) => {
           if (waiter) {
             const w = waiter;
@@ -1082,7 +1085,7 @@ const config = {
         const timer = window.setTimeout(() => {
           waiter = null;
           reject(new ApiError(0, MSG_TURNSTILE, true));
-        }, 20000);
+        }, 120000);
         waiter = {
           resolve: (t) => {
             clearTimeout(timer);
