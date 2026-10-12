@@ -1,0 +1,33 @@
+---
+import Base from '../layouts/Base.astro';
+---
+
+<Base title="Página no encontrada | Bryan López" description="Esta página no existe." noindex>
+  <main class="wrap missing">
+    <h1>Esta página no existe</h1>
+    <p>Puede que el enlace esté mal escrito o que la página se haya movido.</p>
+    <a class="btn btn-primary" href="/">Volver al inicio</a>
+  </main>
+</Base>
+
+<style>
+  .missing {
+    min-height: 100svh;
+    display: grid;
+    align-content: center;
+    justify-items: start;
+    gap: 18px;
+  }
+
+  h1 {
+    font-weight: 800;
+    font-size: clamp(2.5rem, 6vw, 4.5rem);
+    line-height: 1;
+    letter-spacing: -0.04em;
+  }
+
+  p {
+    color: var(--color-muted);
+    font-size: 1.1875rem;
+  }
+</style>
