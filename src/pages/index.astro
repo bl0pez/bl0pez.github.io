@@ -2,6 +2,7 @@
 import { Image } from 'astro:assets';
 import Base from '../layouts/Base.astro';
 import Icon from '../components/Icon.astro';
+import TryDemos from '../components/TryDemos.astro';
 import teamlobo from '../assets/projects/teamlobo.fit.png';
 import superafit from '../assets/projects/superafit.com.png';
 import shopya from '../assets/projects/shopya.com.ar.png';
@@ -31,7 +32,7 @@ const problems = [
   },
 ];
 
-const services = [
+const services: { icon: string; title: string; text: string; link?: { href: string; label: string } }[] = [
   {
     icon: 'browser',
     title: 'Páginas web',
@@ -51,6 +52,7 @@ const services = [
     icon: 'sparkle',
     title: 'Un asistente con IA que atiende por ti',
     text: 'Responde a tus clientes por WhatsApp o en tu web a cualquier hora: precios, horarios, stock y reservas. Tú atiendes solo a quien ya está listo para comprar. En ShopYA hice uno que deja a cada vendedor actualizar productos y pedidos con solo escribirle.',
+    link: { href: '#pruebalo', label: 'Pruébalo con un negocio de ejemplo.' },
   },
 ];
 
@@ -139,6 +141,7 @@ const steps = [
       <nav class="nav" aria-label="Secciones">
         <a href="#trabajos">Trabajos</a>
         <a href="#servicios">Servicios</a>
+        <a href="#pruebalo">Pruébalo</a>
         <a href="#proceso">Proceso</a>
       </nav>
       <a class="btn btn-primary btn-sm" href={whatsapp} target="_blank" rel="noopener">
@@ -206,7 +209,15 @@ const steps = [
               <li class="tile svc">
                 <Icon name={s.icon} size={28} />
                 <h3>{s.title}</h3>
-                <p>{s.text}</p>
+                <p>
+                  {s.text}
+                  {s.link && (
+                    <>
+                      {' '}
+                      <a class="svc-link" href={s.link.href}>{s.link.label}</a>
+                    </>
+                  )}
+                </p>
               </li>
             ))
           }
@@ -228,6 +239,8 @@ const steps = [
         </div>
       </div>
     </section>
+
+    <TryDemos whatsapp={whatsapp} />
 
     <section id="trabajos" class="section wrap" aria-labelledby="trabajos-titulo">
       <h2 id="trabajos-titulo" class="section-title">Trabajos publicados</h2>
@@ -538,6 +551,12 @@ const steps = [
   .svc p {
     margin-top: 6px;
     color: var(--color-muted);
+  }
+
+  .svc-link {
+    color: var(--color-cyan-ink);
+    font-weight: 600;
+    text-underline-offset: 4px;
   }
 
   .auto {

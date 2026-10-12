@@ -140,9 +140,10 @@ Cool neutral ground, white tiles, near-black ink, and the brand pair used as gra
 - **Hairline** (#dce1e2, dark #263035): problem-list rules, ghost button border, chip border, media border.
 - **Cyan Ink** (#02739a, dark #4fc6ea) and **Green Ink** (#3a7a19, dark #8ad263): AA-safe text-weight versions for the case link and service icons.
 - **On Brand** (#0c1a13): text and primary button on gradient surfaces, both themes.
+- **Error Ink** (#9c2a2a, dark #ff9d94) and **Error Bg** (#fbecea, dark #2b1b1b): failed demo requests only.
 
 ### Named Rules
-**The Two Surfaces Rule.** The gradient appears only on the automation tile and the contact band. Never on headers, buttons, text or other tiles.
+**The Two Surfaces Rule.** The gradient fills only the automation tile and the contact band. The only small exceptions are the user chat bubbles and the 3px active-tab bar in the Try demos. Never on headers, buttons, text or other tiles.
 
 **The Ink Variant Rule.** Raw cyan and green are for fills, the focus ring and the logo mark. Colored text and icons use the Cyan Ink and Green Ink tokens.
 
@@ -215,6 +216,9 @@ Four columns; a 36px ink circle with tabular numeral, 1.375rem title, muted text
 
 ### Contact band
 Brand gradient, 24px radius, 800 headline max 14ch, 1.25rem lead, then the single Escríbeme pill and the email link.
+
+### Try demos
+Section `#pruebalo` right after services: a headline and lead, then one white 24px tile holding an accessible tablist (Atención al cliente, Agenda de horas, Redes sociales; arrow keys, Home and End) over three panels. Active tab shows a 3px brand-gradient bar; inactive tabs are Muted Slate. Chat and agenda panels share a business selector (ink-filled pill chip when active, hairline pill otherwise) above a 14px chat panel on Cool Paper: white caption header with the business name and a Cyan Ink "Demo" tag, assistant bubbles in Tile White with a hairline, user bubbles in the brand gradient with On Brand text (14px radius, one 4px corner), "escribiendo…" typing bubble, and three suggestion chips in the empty state. Agenda confirmations are a Green Ink bordered card inside the chat. Social is a form (14px fields, 48px high) beside five post cards with a ghost "Copiar" pill. Errors use the Error Ink and Error Bg tokens and, for limits or failed verification, the single Escríbeme pill. Panel height is clamp(400px, 60svh, 480px); motion is a 240ms rise-in, off under reduced motion. Every business shown is fictional and labelled Demo.
 
 ### Motion
 One load animation, `settle` (700ms, `cubic-bezier(0.23, 1, 0.32, 1)`): opacity from 0.35, translateY 18px, scale 0.985, blur 4px; the four bento tiles are staggered 0, 70, 140, 210ms. Only inside `prefers-reduced-motion: no-preference`. Under `reduce`, animation and transition durations collapse to 1ms and smooth scrolling is off. Hover scale and button hover are gated to `(hover: hover) and (pointer: fine)`. Easing token: `--ease-out` cubic-bezier(0.23, 1, 0.32, 1). The contact band's primary button uses `--color-on-brand` fill with `--color-on-dark` text in both themes.

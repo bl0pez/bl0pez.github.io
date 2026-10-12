@@ -12,6 +12,8 @@
   --color-green-ink: #3a7a19;
   --color-on-brand: #0c1a13;
   --color-on-dark: #f4f7f6;
+  --color-error-ink: #9c2a2a;
+  --color-error-bg: #fbecea;
   --color-pill: rgb(255 255 255 / 0.92);
   --color-shadow: rgb(18 40 48 / 0.10);
   --gradient-brand: linear-gradient(120deg, var(--color-cyan) 0%, #2fb07f 55%, var(--color-green) 100%);
@@ -37,6 +39,8 @@
     --color-line: #263035;
     --color-cyan-ink: #4fc6ea;
     --color-green-ink: #8ad263;
+    --color-error-ink: #ff9d94;
+    --color-error-bg: #2b1b1b;
     --color-pill: rgb(14 18 20 / 0.88);
     --color-shadow: rgb(0 0 0 / 0.35);
   }

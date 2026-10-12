@@ -49,6 +49,8 @@ Approved for publication:
 - n8n automations: offered as a service; no publishable case study yet.
 - Phone/WhatsApp: +56 9 9487 9144. GitHub: github.com/bl0pez. LinkedIn: linkedin.com/in/bryan-lopez-sanchez.
 
+Interactive demos (section "Pruébalo"): the AI chat, booking and social-post demos run on fictional businesses (Lobo Fit, Clínica Sonríe, Sabor Ariqueño), always labelled "Demo". Never present them as clients, case studies or real results.
+
 Not approved, never publish or invent: hospital employment, testimonials, client logos, metrics/results, prices.
 
 ## Product Principles

@@ -8,8 +8,8 @@ Sitio de presentación: webs, apps y automatizaciones con n8n para negocios en C
 ## Desarrollo
 
 ```bash
-npm install
-npm run dev
+pnpm install
+pnpm dev
 ```
 
 ## Contexto de diseño
