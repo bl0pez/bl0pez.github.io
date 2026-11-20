@@ -1,6 +1,6 @@
 ---
 name: Bryan López Portfolio
-description: A bright, tidy bento board in Geist where services, cases and contact share one grid, with the logo gradient reserved for two surfaces.
+description: A bright, tidy bento board in Geist where tutorials, topics and tips share one grid, with the logo gradient reserved for the Discord band.
 colors:
   bg: "#eef1f0"
   tile: "#ffffff"
@@ -143,7 +143,7 @@ Cool neutral ground, white tiles, near-black ink, and the brand pair used as gra
 - **Error Ink** (#9c2a2a, dark #ff9d94) and **Error Bg** (#fbecea, dark #2b1b1b): failed demo requests only.
 
 ### Named Rules
-**The Two Surfaces Rule.** The gradient fills only the automation tile and the contact band. The only small exceptions are the user chat bubbles and the 3px active-tab bar in the Try demos. Never on headers, buttons, text or other tiles.
+**The One Surface Rule.** The gradient fills only the Discord band at the end of each page. Never on headers, buttons, text or tiles.
 
 **The Ink Variant Rule.** Raw cyan and green are for fills, the focus ring and the logo mark. Colored text and icons use the Cyan Ink and Green Ink tokens.
 
