@@ -20,12 +20,12 @@ export const categorias: Categoria[] = [
     id: 'videos',
     icon: 'film-slate',
     title: 'Videos con IA',
-    text: 'Shorts para TikTok, Reels y YouTube hechos con Claude Code: guion, voz, animación 3D y subtítulos.',
+    text: 'Shorts para TikTok, Reels y YouTube hechos con IA: guion, voz, animación 3D y subtítulos.',
     tutoriales: [
       {
         slug: 'short-3d-con-ia',
-        title: 'Tu primer short 3D con Claude Code',
-        summary: 'Instalas una sola cosa y copias un prompt por paso: Claude instala lo demás y hace el video contigo.',
+        title: 'Tu primer short 3D con IA',
+        summary: 'Con Claude, ChatGPT, Gemini u OpenCode gratis: copias un prompt por paso y la IA hace el video contigo.',
         minutes: 15,
         nivel: 'Principiante',
       },

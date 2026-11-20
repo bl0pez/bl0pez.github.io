@@ -7,11 +7,53 @@ import CopyButton from '../../components/CopyButton.astro';
 import DiscordBand from '../../components/DiscordBand.astro';
 import ejemplo from '../../assets/guias/short-3d-ejemplo.png';
 
-// Lo único que se instala a mano. Todo lo demás lo instala Claude con el prompt 1.
-const instalarClaude = 'irm https://claude.ai/install.ps1 | iex';
+// Apps de escritorio que pueden trabajar dentro de una carpeta de tu computador.
+// Precios y planes verificados en sus páginas oficiales (nov. 2026); cambian seguido.
+const apps = [
+  {
+    id: 'claude',
+    icon: 'asterisk',
+    name: 'Claude',
+    de: 'Anthropic',
+    precio: 'Plan Pro o superior',
+    nota: 'La que uso yo. La más constante en tareas largas como esta.',
+    donde: 'Pestaña Code → Local → Open folder…',
+    link: { href: 'https://claude.com/download', label: 'claude.com/download' },
+    recomendada: true,
+  },
+  {
+    id: 'chatgpt',
+    icon: 'chat-circle-dots',
+    name: 'ChatGPT (Codex)',
+    de: 'OpenAI',
+    precio: 'Gratis con límites',
+    nota: 'El plan gratis trae Codex para tareas cortas; con Plus rinde más.',
+    donde: 'Codex → elige la carpeta del proyecto',
+    link: { href: 'https://chatgpt.com/download', label: 'chatgpt.com/download' },
+  },
+  {
+    id: 'antigravity',
+    icon: 'sparkle',
+    name: 'Antigravity (Gemini)',
+    de: 'Google',
+    precio: 'Gratis con cuota semanal',
+    nota: 'La app de agentes de Google. Ojo: la app de Gemini normal es solo chat y no sirve para esto.',
+    donde: 'Abre la carpeta como espacio de trabajo',
+    link: { href: 'https://antigravity.google/download', label: 'antigravity.google' },
+  },
+  {
+    id: 'opencode',
+    icon: 'code',
+    name: 'OpenCode',
+    de: 'Código abierto',
+    precio: 'Gratis, sin cuenta',
+    nota: 'Trae modelos gratis. Son más lentos y se pierden más: ve paso a paso.',
+    donde: 'Abre la carpeta del proyecto',
+    link: { href: 'https://opencode.ai/download', label: 'opencode.ai/download' },
+  },
+];
 
 const herramientas = [
-  { icon: 'terminal-window', name: 'Claude Code', what: 'La IA que trabaja en tu computador: escribe, instala y ejecuta todo lo demás. La instalas tú.' },
   { icon: 'hexagon', name: 'Node.js', what: 'Hace funcionar Three.js, el motor 3D, y la grabadora de cuadros (Playwright).' },
   { icon: 'file-py', name: 'Python + edge-tts', what: 'Pone la voz al guion, gratis y sin cuentas, con las voces de Microsoft.' },
   { icon: 'film-strip', name: 'ffmpeg', what: 'Junta las imágenes y la voz en el video final .mp4.' },
@@ -21,14 +63,14 @@ const pasos = [
   {
     id: 'instalar',
     title: 'Instala lo que falta',
-    why: 'Claude revisa tu computador e instala Node.js, Python, edge-tts, Playwright y ffmpeg. Tú solo apruebas.',
+    why: 'La IA revisa tu computador e instala Node.js, Python, edge-tts, Playwright y ffmpeg. Tú solo apruebas.',
     prompt: `Revisa si en este computador están instalados Node.js, Python, la librería edge-tts de Python, Playwright con su navegador y ffmpeg. Instala con winget, pip o npm solo lo que falte, sin preguntarme por cada uno.
 
 Al terminar, dime en una frase para qué sirve cada herramienta y confirma que funcionan mostrando sus versiones.`,
     tips: [
-      'Claude te pide permiso antes de ejecutar cada comando: léelo y acepta.',
+      'La app te pide permiso antes de ejecutar cada comando: léelo y acepta.',
       'Si dice que winget no existe, actualiza "Instalador de aplicación" desde Microsoft Store y vuelve a pedírselo.',
-      'Cuando termine, cierra PowerShell, ábrelo de nuevo en la carpeta y escribe claude otra vez.',
+      'Si después no encuentra lo que instaló, cierra la app, ábrela de nuevo en la misma carpeta y sigue.',
     ],
   },
   {
@@ -111,28 +153,28 @@ Hazlo tú todo dentro de esta carpeta y explícame cada paso en simple, sin pala
 ---
 
 <Page
-  title="Tu primer short 3D con Claude Code | Tutoriales | Bryan López"
-  description="Instala Claude Code y copia un prompt por paso: la IA instala todo, escribe el guion, pone la voz, arma la escena 3D con subtítulos y te entrega el video."
+  title="Tu primer short 3D con IA: Claude, ChatGPT, Gemini u OpenCode | Bryan López"
+  description="Elige una app de IA de escritorio (Claude, ChatGPT, Antigravity de Google u OpenCode gratis) y copia un prompt por paso para hacer un short 3D con voz y subtítulos."
   current="tutoriales"
 >
   <div class="wrap guide">
     <Breadcrumbs items={[
       { href: '/', label: 'Inicio' },
       { href: '/tutoriales/', label: 'Tutoriales' },
-      { href: '/tutoriales/short-3d-con-ia/', label: 'Short 3D con Claude Code' },
+      { href: '/tutoriales/short-3d-con-ia/', label: 'Short 3D con IA' },
     ]} />
 
     <header class="guide-head">
       <div>
-        <h1 class="page-title">Tu primer short 3D con Claude Code</h1>
-        <p class="section-lead">Instalas una sola cosa y después copias un prompt por paso: Claude instala lo demás, escribe el guion, pone la voz, arma la animación 3D con subtítulos y te entrega el .mp4.</p>
+        <h1 class="page-title">Tu primer short 3D con IA</h1>
+        <p class="section-lead">Eliges una app de IA (Claude, ChatGPT, Gemini u OpenCode) y copias un prompt por paso: la IA instala lo que falta, escribe el guion, pone la voz, arma la animación 3D con subtítulos y te entrega el .mp4.</p>
         <ul class="meta">
           <li><Icon name="clock" size={18} />15 min</li>
-          <li><Icon name="windows-logo" size={18} />Windows</li>
+          <li><Icon name="desktop" size={18} />App de escritorio</li>
           <li><Icon name="student" size={18} />Principiante</li>
         </ul>
         <nav class="toc" aria-label="En esta guía">
-          <a href="#antes">Antes de empezar</a>
+          <a href="#antes">Elige tu app</a>
           {pasos.map((p, i) => <a href={`#${p.id}`}>{i + 1}. {p.title}</a>)}
           <a href="#ajustes">Ajustes</a>
           <a href="#prompt">Todo en un mensaje</a>
@@ -145,20 +187,35 @@ Hazlo tú todo dentro de esta carpeta y explícame cada paso en simple, sin pala
     </header>
 
     <section class="section" id="antes" aria-labelledby="h-antes">
-      <h2 class="section-title" id="h-antes">Antes de empezar</h2>
-      <p class="section-lead">Lo único que instalas tú es Claude Code. Necesitas una cuenta de Claude con plan Pro o superior.</p>
+      <h2 class="section-title" id="h-antes">Elige tu app</h2>
+      <p class="section-lead">Cualquiera de estas apps de escritorio sirve: todas pueden trabajar dentro de una carpeta de tu computador, instalar programas y crear archivos. No necesitas abrir PowerShell.</p>
+      <ul class="apps">
+        {apps.map((a) => (
+          <li class="tile app" id={`app-${a.id}`}>
+            <div class="app-head">
+              <Icon name={a.icon} size={26} class="app-icon" />
+              <div>
+                <h3>{a.name}</h3>
+                <p class="muted">{a.de}</p>
+              </div>
+              {a.recomendada && <span class="badge">Recomendada</span>}
+            </div>
+            <p class="price">{a.precio}</p>
+            <p class="muted">{a.nota}</p>
+            <p class="where"><Icon name="folder-open" size={18} />{a.donde}</p>
+            <a class="ink-link" href={a.link.href} target="_blank" rel="noopener">Descargar en {a.link.label}</a>
+          </li>
+        ))}
+      </ul>
+
+      <h3 class="sub">Antes del primer prompt</h3>
       <ol class="setup">
-        <li>Abre <strong>PowerShell</strong> (búscalo en el menú Inicio) y pega este comando:
-          <div class="cmd">
-            <code id="cmd-claude">{instalarClaude}</code>
-            <CopyButton target="cmd-claude" what="el comando para instalar Claude Code" />
-          </div>
-        </li>
-        <li>Crea una carpeta para tu video, por ejemplo <code>C:\videos\mi-primer-short</code>, y ábrela en PowerShell.</li>
-        <li>Escribe <code>claude</code> y presiona Enter. La primera vez te pide iniciar sesión con tu cuenta.</li>
+        <li>Instala la app que elegiste e inicia sesión.</li>
+        <li>Crea una carpeta vacía para tu video, por ejemplo <code>C:\videos\mi-primer-short</code>.</li>
+        <li>En la app, abre esa carpeta (cada tarjeta de arriba dice dónde). Todo lo que haga la IA va a quedar ahí.</li>
       </ol>
 
-      <h3 class="sub">Qué hace cada herramienta</h3>
+      <h3 class="sub">Lo que la IA va a instalar por ti</h3>
       <div class="tools">
         {herramientas.map((h) => (
           <article class="tile tool">
@@ -174,7 +231,7 @@ Hazlo tú todo dentro de esta carpeta y explícame cada paso en simple, sin pala
 
     <section class="section" aria-labelledby="h-pasos">
       <h2 class="section-title" id="h-pasos">Un prompt por paso</h2>
-      <p class="section-lead">Pega cada prompt en Claude, espera a que termine y revisa antes de pasar al siguiente. Cambia solo lo que está entre corchetes.</p>
+      <p class="section-lead">Pega cada prompt en tu app, espera a que termine y revisa antes de pasar al siguiente. Cambia solo lo que está entre corchetes.</p>
       <ol class="steps">
         {pasos.map((p, i) => (
           <li class="tile step" id={p.id}>
@@ -358,9 +415,75 @@ Hazlo tú todo dentro de esta carpeta y explícame cada paso en simple, sin pala
     margin-top: 48px;
   }
 
-  .tools {
+  .apps {
+    list-style: none;
+    padding: 0;
     display: grid;
     grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 16px;
+    margin-top: 32px;
+  }
+
+  .app {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 24px;
+  }
+
+  .app-head {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    gap: 12px;
+    align-items: start;
+  }
+
+  .app-head :global(.app-icon) {
+    color: var(--color-green-ink);
+    margin-top: 2px;
+  }
+
+  .app-head p {
+    font-size: 0.875rem;
+  }
+
+  .badge {
+    padding: 4px 10px;
+    border-radius: 999px;
+    background: var(--color-ink);
+    color: var(--color-bg);
+    font-size: 0.75rem;
+    font-weight: 700;
+    white-space: nowrap;
+  }
+
+  .price {
+    font-weight: 700;
+  }
+
+  .app > .muted {
+    font-size: 0.9375rem;
+  }
+
+  .where {
+    display: flex;
+    gap: 8px;
+    align-items: flex-start;
+    margin-top: auto;
+    padding-top: 6px;
+    font-size: 0.9rem;
+    font-weight: 600;
+  }
+
+  .where :global(svg) {
+    flex: none;
+    margin-top: 2px;
+    color: var(--color-cyan-ink);
+  }
+
+  .tools {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 16px;
     margin-top: 20px;
   }
@@ -511,7 +634,8 @@ Hazlo tú todo dentro de esta carpeta y explícame cada paso en simple, sin pala
   }
 
   @media (max-width: 1099px) {
-    .tools {
+    .tools,
+    .apps {
       grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 
@@ -532,6 +656,7 @@ Hazlo tú todo dentro de esta carpeta y explícame cada paso en simple, sin pala
     }
 
     .tools,
+    .apps,
     .tweaks {
       grid-template-columns: minmax(0, 1fr);
       gap: 12px;
