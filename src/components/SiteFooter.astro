@@ -1,0 +1,42 @@
+---
+import Icon from './Icon.astro';
+import { DISCORD } from '../data/links';
+---
+
+<footer class="wrap foot">
+  <p>© {new Date().getFullYear()} Bryan López · Arica, Chile</p>
+  <div class="foot-links">
+    <a href={DISCORD} target="_blank" rel="noopener"><Icon name="discord-logo" size={20} />Discord</a>
+    <a href="https://github.com/bl0pez" target="_blank" rel="noopener"><Icon name="github-logo" size={20} />GitHub</a>
+    <a href="https://www.linkedin.com/in/bryan-lopez-sanchez" target="_blank" rel="noopener"><Icon name="linkedin-logo" size={20} />LinkedIn</a>
+  </div>
+</footer>
+
+<style>
+  .foot {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 16px;
+    padding-block: 48px;
+    color: var(--color-muted);
+    font-size: 0.9375rem;
+  }
+
+  .foot-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 22px;
+  }
+
+  .foot-links a {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+  }
+
+  .foot-links a:hover {
+    color: var(--color-ink);
+  }
+</style>

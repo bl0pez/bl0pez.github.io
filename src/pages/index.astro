@@ -3,6 +3,7 @@ import { Image } from 'astro:assets';
 import Base from '../layouts/Base.astro';
 import Icon from '../components/Icon.astro';
 import TryDemos from '../components/TryDemos.astro';
+import { DISCORD } from '../data/links';
 import teamlobo from '../assets/projects/teamlobo.fit.png';
 import superafit from '../assets/projects/superafit.com.png';
 import shopya from '../assets/projects/shopya.com.ar.png';
@@ -143,6 +144,7 @@ const steps = [
         <a href="#servicios">Servicios</a>
         <a href="#pruebalo">Pruébalo</a>
         <a href="#proceso">Proceso</a>
+        <a href="/tutoriales/">Tutoriales</a>
       </nav>
       <a class="btn btn-primary btn-sm" href={whatsapp} target="_blank" rel="noopener">
         <Icon name="whatsapp-logo" size={18} />Escríbeme
@@ -309,6 +311,8 @@ const steps = [
   <footer class="wrap foot">
     <p>© {new Date().getFullYear()} Bryan López · Arica, Chile</p>
     <div class="foot-links">
+      <a href="/tutoriales/">Tutoriales</a>
+      <a href={DISCORD} target="_blank" rel="noopener"><Icon name="discord-logo" size={20} />Discord</a>
       <a href="https://github.com/bl0pez" target="_blank" rel="noopener"><Icon name="github-logo" size={20} />GitHub</a>
       <a href="https://www.linkedin.com/in/bryan-lopez-sanchez" target="_blank" rel="noopener"><Icon name="linkedin-logo" size={20} />LinkedIn</a>
     </div>

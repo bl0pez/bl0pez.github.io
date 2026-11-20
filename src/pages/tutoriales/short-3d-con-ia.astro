@@ -1,0 +1,413 @@
+---
+import Base from '../../layouts/Base.astro';
+import Icon from '../../components/Icon.astro';
+import SiteHeader from '../../components/SiteHeader.astro';
+import SiteFooter from '../../components/SiteFooter.astro';
+import { DISCORD } from '../../data/links';
+
+const herramientas = [
+  {
+    icon: 'terminal-window',
+    name: 'Claude Code',
+    what: 'La IA que escribe el guion, programa la escena 3D y arma el video. Necesita una cuenta de Claude con plan Pro o superior.',
+    install: 'irm https://claude.ai/install.ps1 | iex',
+    link: { href: 'https://claude.com/claude-code', label: 'claude.com/claude-code' },
+  },
+  {
+    icon: 'hexagon',
+    name: 'Node.js',
+    what: 'Corre Three.js (el motor 3D) y graba la animación cuadro por cuadro.',
+    install: 'winget install OpenJS.NodeJS.LTS',
+  },
+  {
+    icon: 'file-py',
+    name: 'Python',
+    what: 'Genera la voz gratis con edge-tts, sin claves ni cuentas.',
+    install: 'winget install Python.Python.3.12',
+  },
+  {
+    icon: 'film-strip',
+    name: 'ffmpeg',
+    what: 'Une las imágenes y la voz en el video final .mp4.',
+    install: 'winget install Gyan.FFmpeg',
+  },
+];
+
+const pasos = [
+  {
+    title: 'Instala las herramientas',
+    text: 'Abre PowerShell y pega los cuatro comandos de arriba, uno por uno. Cuando terminen, cierra PowerShell y ábrelo de nuevo.',
+  },
+  {
+    title: 'Crea una carpeta para tu video',
+    text: 'Por ejemplo C:\\videos\\mi-primer-short. Ábrela en PowerShell y escribe claude. La primera vez te pide iniciar sesión con tu cuenta de Claude.',
+  },
+  {
+    title: 'Pega el prompt',
+    text: 'Copia el prompt de abajo, cambia [TU IDEA] por el tema de tu video y pégalo. Claude te muestra el guion antes de seguir: si no te gusta, pídele cambios con tus palabras.',
+  },
+  {
+    title: 'Revisa y sube',
+    text: 'Cuando termine te abre video.mp4. Pídele ajustes ("más rápido", "otro color", "subtítulos más grandes") hasta que te guste y súbelo.',
+  },
+];
+
+const prompt = `Quiero hacer un short vertical en 3D (1080x1920, 30 fps, unos 30 segundos) sobre: [TU IDEA].
+
+Hazlo tú todo dentro de esta carpeta y explícame cada paso en simple, sin palabras técnicas:
+
+1. Escribe un guion corto en español: la primera frase es una pregunta que dé curiosidad y después 3 o 4 datos sorprendentes. Muéstramelo y espera mi visto bueno.
+2. Genera la voz gratis con edge-tts (voz es-MX-JorgeNeural, velocidad +8%) y guarda en qué momento se dice cada palabra.
+3. Haz un index.html con Three.js: una escena 3D sencilla con formas y colores vivos que cambie con cada frase, una cámara que se mueva suave y subtítulos grandes palabra por palabra en el centro de la pantalla.
+4. Graba la animación cuadro por cuadro con Playwright (no grabes la pantalla) y une las imágenes con la voz usando ffmpeg en un archivo video.mp4.
+5. Ábreme el video y dime tres cosas que podría mejorar.
+
+Si falta instalar algo, instálalo tú o dame el comando exacto para PowerShell.`;
+---
+
+<Base
+  title="Tu primer short 3D con Claude Code | Tutoriales | Bryan López"
+  description="Las 4 herramientas gratis que necesitas, cómo instalarlas en Windows y el prompt para que Claude Code haga un short 3D con voz y subtítulos por ti."
+>
+  <SiteHeader current="tutoriales" />
+
+  <main id="contenido" class="wrap guide">
+    <nav class="crumbs" aria-label="Ruta">
+      <a href="/tutoriales/">Tutoriales</a>
+      <Icon name="caret-right" size={14} />
+      <a href="/tutoriales/#videos">Videos con IA</a>
+    </nav>
+
+    <header class="guide-head">
+      <h1>Tu primer short 3D con Claude Code</h1>
+      <p class="section-lead">Tú pones la idea y Claude escribe el guion, le pone voz, arma la animación 3D con subtítulos y te entrega el .mp4. Sin editar y sin saber programar.</p>
+    </header>
+
+    <section class="section" aria-labelledby="h-herr">
+      <h2 class="section-title" id="h-herr">Lo que necesitas</h2>
+      <p class="section-lead">Cuatro herramientas. Todas gratis menos Claude, que pide plan Pro. Los comandos son para Windows (PowerShell).</p>
+      <div class="tools">
+        {herramientas.map((h) => (
+          <article class="tile tool">
+            <Icon name={h.icon} size={28} class="tool-icon" />
+            <div class="tool-body">
+              <h3>{h.name}</h3>
+              <p class="muted">{h.what}</p>
+              <div class="cmd">
+                <code>{h.install}</code>
+                <button class="copy" type="button" data-copy={h.install} aria-label={`Copiar comando de ${h.name}`}>
+                  <Icon name="copy" size={18} /><span>Copiar</span>
+                </button>
+              </div>
+              {h.link && <a class="ink-link" href={h.link.href} target="_blank" rel="noopener">{h.link.label}</a>}
+            </div>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="h-pasos">
+      <h2 class="section-title" id="h-pasos">Paso a paso</h2>
+      <ol class="steps">
+        {pasos.map((p, i) => (
+          <li>
+            <span class="step-n">{i + 1}</span>
+            <h3>{p.title}</h3>
+            <p class="muted">{p.text}</p>
+          </li>
+        ))}
+      </ol>
+    </section>
+
+    <section class="section" id="prompt" aria-labelledby="h-prompt">
+      <h2 class="section-title" id="h-prompt">El prompt</h2>
+      <p class="section-lead">Cópialo tal cual y cambia solo lo que está entre corchetes. Ideas que funcionan: «¿por qué el mar es salado?», «qué pasa si cavas un túnel al centro de la Tierra», «cómo se hace un chip».</p>
+      <div class="tile prompt">
+        <div class="prompt-bar">
+          <span>prompt.txt</span>
+          <button class="copy" type="button" data-copy={prompt} aria-label="Copiar el prompt">
+            <Icon name="copy" size={18} /><span>Copiar prompt</span>
+          </button>
+        </div>
+        <pre><code>{prompt}</code></pre>
+      </div>
+      <p class="note muted">Este es un punto de partida. El que uso en mis videos agrega música, efectos de sonido y reglas para que la gente no deslice; lo comparto en el Discord.</p>
+    </section>
+
+    <section class="section">
+      <div class="band">
+        <h2>¿Algo no te funcionó?</h2>
+        <p>Pásate por el Discord: ahí resolvemos errores de instalación, compartimos videos y dejo los prompts nuevos.</p>
+        <a class="btn btn-brand" href={DISCORD} target="_blank" rel="noopener">
+          <Icon name="discord-logo" size={20} />Entrar al Discord
+        </a>
+      </div>
+    </section>
+  </main>
+
+  <SiteFooter />
+</Base>
+
+<script>
+  for (const btn of document.querySelectorAll<HTMLButtonElement>('button[data-copy]')) {
+    const label = btn.querySelector('span');
+    const original = label?.textContent ?? '';
+    btn.addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(btn.dataset.copy ?? '');
+        if (label) label.textContent = 'Copiado';
+      } catch {
+        if (label) label.textContent = 'Selecciona y copia';
+      }
+      setTimeout(() => {
+        if (label) label.textContent = original;
+      }, 1800);
+    });
+  }
+</script>
+
+<style>
+  .guide {
+    padding-top: clamp(28px, 5vw, 56px);
+  }
+
+  .crumbs {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--color-muted);
+    font-size: 0.9375rem;
+    font-weight: 500;
+  }
+
+  .crumbs a {
+    text-decoration: none;
+  }
+
+  .crumbs a:hover {
+    color: var(--color-ink);
+  }
+
+  .guide-head {
+    margin-top: 20px;
+  }
+
+  h1 {
+    font-weight: 800;
+    font-size: clamp(2.5rem, 6vw, 5rem);
+    line-height: 0.97;
+    letter-spacing: -0.04em;
+    max-width: 16ch;
+  }
+
+  h3 {
+    font-weight: 700;
+    font-size: 1.25rem;
+    letter-spacing: -0.01em;
+    line-height: 1.3;
+  }
+
+  .muted {
+    color: var(--color-muted);
+  }
+
+  .tile {
+    background: var(--color-tile);
+    border-radius: var(--radius-tile);
+  }
+
+  .tools {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+    margin-top: 32px;
+  }
+
+  .tool {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: 16px;
+    padding: 28px 30px;
+  }
+
+  .tool :global(.tool-icon) {
+    color: var(--color-green-ink);
+    margin-top: 2px;
+  }
+
+  .tool-body {
+    display: grid;
+    gap: 10px;
+    align-content: start;
+  }
+
+  .cmd {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 6px;
+    padding: 8px 8px 8px 16px;
+    background: var(--color-bg);
+    border-radius: 999px;
+  }
+
+  .cmd code {
+    flex: 1;
+    min-width: 0;
+    overflow-x: auto;
+    white-space: nowrap;
+    font-family: ui-monospace, 'Cascadia Code', Consolas, monospace;
+    font-size: 0.875rem;
+  }
+
+  .copy {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    flex: none;
+    font: inherit;
+    font-weight: 600;
+    font-size: 0.875rem;
+    padding: 8px 14px;
+    border-radius: 999px;
+    border: 1px solid var(--color-line);
+    background: var(--color-tile);
+    color: var(--color-ink);
+    cursor: pointer;
+    transition: transform 160ms var(--ease-out), border-color 200ms ease;
+  }
+
+  .copy:active {
+    transform: scale(0.97);
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .copy:hover {
+      border-color: var(--color-ink);
+    }
+  }
+
+  .ink-link {
+    color: var(--color-cyan-ink);
+    font-weight: 600;
+    font-size: 0.9375rem;
+  }
+
+  .steps {
+    list-style: none;
+    padding: 0;
+    margin-top: 32px;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 32px;
+  }
+
+  .steps li {
+    display: grid;
+    gap: 10px;
+    align-content: start;
+  }
+
+  .step-n {
+    display: grid;
+    place-items: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 999px;
+    background: var(--color-ink);
+    color: var(--color-bg);
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .prompt {
+    margin-top: 32px;
+    overflow: hidden;
+  }
+
+  .prompt-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 14px 16px 14px 24px;
+    border-bottom: 1px solid var(--color-line);
+    color: var(--color-muted);
+    font-weight: 600;
+    font-size: 0.9375rem;
+  }
+
+  .prompt pre {
+    padding: 24px;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+    font-family: ui-monospace, 'Cascadia Code', Consolas, monospace;
+    font-size: 0.9375rem;
+    line-height: 1.65;
+  }
+
+  .note {
+    margin-top: 16px;
+    max-width: 62ch;
+  }
+
+  .band {
+    background: var(--gradient-brand);
+    color: var(--color-on-brand);
+    border-radius: var(--radius-tile);
+    padding: clamp(36px, 6vw, 80px);
+    display: grid;
+    justify-items: start;
+    gap: 18px;
+  }
+
+  .band h2 {
+    font-weight: 800;
+    font-size: clamp(2.25rem, 5vw, 4rem);
+    line-height: 0.98;
+    letter-spacing: -0.04em;
+    max-width: 14ch;
+  }
+
+  .band p {
+    font-size: 1.25rem;
+    max-width: 48ch;
+  }
+
+  .btn-brand {
+    background: var(--color-on-brand);
+    color: var(--color-on-dark);
+    margin-top: 8px;
+  }
+
+  @media (max-width: 1099px) {
+    .tools {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .steps {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      row-gap: 36px;
+    }
+  }
+
+  @media (max-width: 767px) {
+    .tools {
+      gap: 12px;
+    }
+
+    .tool {
+      padding: 24px;
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .steps {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .prompt pre {
+      padding: 20px;
+      font-size: 0.875rem;
+    }
+  }
+</style>
