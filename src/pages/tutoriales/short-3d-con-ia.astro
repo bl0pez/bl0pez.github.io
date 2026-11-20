@@ -7,73 +7,112 @@ import CopyButton from '../../components/CopyButton.astro';
 import DiscordBand from '../../components/DiscordBand.astro';
 import ejemplo from '../../assets/guias/short-3d-ejemplo.png';
 
+// Lo único que se instala a mano. Todo lo demás lo instala Claude con el prompt 1.
+const instalarClaude = 'irm https://claude.ai/install.ps1 | iex';
+
 const herramientas = [
-  {
-    id: 'claude',
-    icon: 'terminal-window',
-    name: 'Claude Code',
-    what: 'La IA que escribe el guion, programa la escena 3D y arma el video. Necesita una cuenta de Claude con plan Pro o superior.',
-    install: 'irm https://claude.ai/install.ps1 | iex',
-    link: { href: 'https://claude.com/claude-code', label: 'claude.com/claude-code' },
-  },
-  {
-    id: 'node',
-    icon: 'hexagon',
-    name: 'Node.js',
-    what: 'Corre Three.js (el motor 3D) y graba la animación cuadro por cuadro.',
-    install: 'winget install OpenJS.NodeJS.LTS',
-  },
-  {
-    id: 'python',
-    icon: 'file-py',
-    name: 'Python',
-    what: 'Genera la voz gratis con edge-tts, sin claves ni cuentas.',
-    install: 'winget install Python.Python.3.12',
-  },
-  {
-    id: 'ffmpeg',
-    icon: 'film-strip',
-    name: 'ffmpeg',
-    what: 'Une las imágenes y la voz en el video final .mp4.',
-    install: 'winget install Gyan.FFmpeg',
-  },
+  { icon: 'terminal-window', name: 'Claude Code', what: 'La IA que trabaja en tu computador: escribe, instala y ejecuta todo lo demás. La instalas tú.' },
+  { icon: 'hexagon', name: 'Node.js', what: 'Hace funcionar Three.js, el motor 3D, y la grabadora de cuadros (Playwright).' },
+  { icon: 'file-py', name: 'Python + edge-tts', what: 'Pone la voz al guion, gratis y sin cuentas, con las voces de Microsoft.' },
+  { icon: 'film-strip', name: 'ffmpeg', what: 'Junta las imágenes y la voz en el video final .mp4.' },
 ];
 
 const pasos = [
   {
-    title: 'Instala las herramientas',
-    text: 'Abre PowerShell y pega los cuatro comandos de arriba, uno por uno. Cuando terminen, cierra PowerShell y ábrelo de nuevo.',
+    id: 'instalar',
+    title: 'Instala lo que falta',
+    why: 'Claude revisa tu computador e instala Node.js, Python, edge-tts, Playwright y ffmpeg. Tú solo apruebas.',
+    prompt: `Revisa si en este computador están instalados Node.js, Python, la librería edge-tts de Python, Playwright con su navegador y ffmpeg. Instala con winget, pip o npm solo lo que falte, sin preguntarme por cada uno.
+
+Al terminar, dime en una frase para qué sirve cada herramienta y confirma que funcionan mostrando sus versiones.`,
+    tips: [
+      'Claude te pide permiso antes de ejecutar cada comando: léelo y acepta.',
+      'Si dice que winget no existe, actualiza "Instalador de aplicación" desde Microsoft Store y vuelve a pedírselo.',
+      'Cuando termine, cierra PowerShell, ábrelo de nuevo en la carpeta y escribe claude otra vez.',
+    ],
   },
   {
-    title: 'Crea una carpeta para tu video',
-    text: 'Por ejemplo C:\\videos\\mi-primer-short. Ábrela en PowerShell y escribe claude. La primera vez te pide iniciar sesión con tu cuenta de Claude.',
+    id: 'guion',
+    title: 'El guion',
+    why: 'Lo que dirá la voz. Es lo que más decide si la gente se queda mirando.',
+    prompt: `Quiero hacer un short vertical de unos 30 segundos sobre: [TU IDEA].
+
+Escribe el guion en español, una frase por línea, en guion.txt:
+- La primera frase es una pregunta que dé curiosidad.
+- Después 3 o 4 datos sorprendentes, cada uno con una comparación de la vida diaria.
+- La última frase invita a enviarle el video a alguien.
+
+Muéstramelo y espera mi visto bueno antes de seguir.`,
+    tips: [
+      'Unas 75 palabras son 30 segundos.',
+      'Funcionan las preguntas que todos se hicieron alguna vez: «¿por qué el mar es salado?», «¿qué pasa si cavas un túnel al centro de la Tierra?».',
+      'Si algo no te gusta, díselo con tus palabras: «más corto», «la primera frase más intrigante».',
+    ],
   },
   {
-    title: 'Pega el prompt',
-    text: 'Copia el prompt de abajo, cambia [TU IDEA] por el tema de tu video y pégalo. Claude te muestra el guion antes de seguir: si no te gusta, pídele cambios con tus palabras.',
+    id: 'voz',
+    title: 'La voz',
+    why: 'Convierte el guion en audio y anota en qué segundo se dice cada palabra, para sincronizar los subtítulos.',
+    prompt: `Con el guion aprobado, genera la voz con edge-tts (voz es-MX-JorgeNeural, velocidad +8%).
+
+Guarda el audio en voz.mp3 y un archivo palabras.json con el segundo exacto en que empieza cada palabra. Dime cuánto dura el audio.`,
+    tips: [
+      'Otras voces: es-MX-DaliaNeural, es-ES-AlvaroNeural, es-AR-TomasNeural, es-CO-GonzaloNeural.',
+      'Si lee mal un número o una sigla, pídele que la escriba en letras en el guion («tres de» en vez de «3D»).',
+    ],
   },
   {
-    title: 'Revisa y sube',
-    text: 'Cuando termine te abre video.mp4. Pídele ajustes ("más rápido", "otro color", "subtítulos más grandes") hasta que te guste y súbelo.',
+    id: 'escena',
+    title: 'La escena 3D y los subtítulos',
+    why: 'La animación que se ve, hecha con Three.js en una página web.',
+    prompt: `Haz un index.html con Three.js que dure lo mismo que voz.mp3:
+- Una escena 3D sencilla, con formas y colores vivos, que cambie con cada frase del guion.
+- Una cámara que siempre se mueva suave.
+- Subtítulos grandes palabra por palabra en el centro, sincronizados con palabras.json.
+
+Todo tiene que depender del tiempo y no de la velocidad del computador, para poder grabarlo cuadro por cuadro. Ábremelo en el navegador para verlo.`,
+    tips: [
+      'Pídele un estilo: «low poly», «neón», «colores pastel», «como dibujo animado».',
+      'Deja libre el borde de abajo y el derecho: ahí van los botones de TikTok y Reels.',
+      'Que algo cambie cada 2 segundos mantiene a la gente mirando.',
+    ],
+  },
+  {
+    id: 'grabar',
+    title: 'Grabar y armar el video',
+    why: 'Saca una foto por cada cuadro de la animación y la junta con la voz.',
+    prompt: `Graba la animación cuadro por cuadro con Playwright a 1080x1920 y 30 fps (no grabes la pantalla) y une las imágenes con voz.mp3 usando ffmpeg en video.mp4.
+
+Ábreme el video cuando esté listo y dime tres cosas que podría mejorar.`,
+    tips: [
+      'Tarda unos minutos. Grabar cuadro por cuadro hace que no se corte aunque tu computador sea lento.',
+      'Si el video sale entrecortado o desfasado, pídele que revise que todo dependa del tiempo.',
+    ],
   },
 ];
 
-const prompt = `Quiero hacer un short vertical en 3D (1080x1920, 30 fps, unos 30 segundos) sobre: [TU IDEA].
+const ajustes = [
+  'Pon los subtítulos más grandes y en amarillo.',
+  'Agrega música suave de fondo, más baja que la voz.',
+  'Haz que la cámara se acerque cuando digo el dato más sorprendente.',
+  'Hazme una portada de 1080x1920 con el título en letras grandes.',
+];
+
+const todoEnUno = `Quiero hacer un short vertical en 3D (1080x1920, 30 fps, unos 30 segundos) sobre: [TU IDEA].
 
 Hazlo tú todo dentro de esta carpeta y explícame cada paso en simple, sin palabras técnicas:
 
-1. Escribe un guion corto en español: la primera frase es una pregunta que dé curiosidad y después 3 o 4 datos sorprendentes. Muéstramelo y espera mi visto bueno.
-2. Genera la voz gratis con edge-tts (voz es-MX-JorgeNeural, velocidad +8%) y guarda en qué momento se dice cada palabra.
-3. Haz un index.html con Three.js: una escena 3D sencilla con formas y colores vivos que cambie con cada frase, una cámara que se mueva suave y subtítulos grandes palabra por palabra en el centro de la pantalla.
-4. Graba la animación cuadro por cuadro con Playwright (no grabes la pantalla) y une las imágenes con la voz usando ffmpeg en un archivo video.mp4.
-5. Ábreme el video y dime tres cosas que podría mejorar.
-
-Si falta instalar algo, instálalo tú o dame el comando exacto para PowerShell.`;
+1. Revisa e instala lo que falte: Node.js, Python, edge-tts, Playwright y ffmpeg.
+2. Escribe un guion corto en español: la primera frase es una pregunta que dé curiosidad y después 3 o 4 datos sorprendentes. Muéstramelo y espera mi visto bueno.
+3. Genera la voz gratis con edge-tts (voz es-MX-JorgeNeural, velocidad +8%) y guarda en qué momento se dice cada palabra.
+4. Haz un index.html con Three.js: una escena 3D sencilla con formas y colores vivos que cambie con cada frase, una cámara que se mueva suave y subtítulos grandes palabra por palabra en el centro de la pantalla.
+5. Graba la animación cuadro por cuadro con Playwright (no grabes la pantalla) y une las imágenes con la voz usando ffmpeg en un archivo video.mp4.
+6. Ábreme el video y dime tres cosas que podría mejorar.`;
 ---
 
 <Page
   title="Tu primer short 3D con Claude Code | Tutoriales | Bryan López"
-  description="Las 4 herramientas gratis que necesitas, cómo instalarlas en Windows y el prompt para que Claude Code haga un short 3D con voz y subtítulos por ti."
+  description="Instala Claude Code y copia un prompt por paso: la IA instala todo, escribe el guion, pone la voz, arma la escena 3D con subtítulos y te entrega el video."
   current="tutoriales"
 >
   <div class="wrap guide">
@@ -86,12 +125,18 @@ Si falta instalar algo, instálalo tú o dame el comando exacto para PowerShell.
     <header class="guide-head">
       <div>
         <h1 class="page-title">Tu primer short 3D con Claude Code</h1>
-        <p class="section-lead">Tú pones la idea y Claude escribe el guion, le pone voz, arma la animación 3D con subtítulos y te entrega el .mp4. Sin editar y sin saber programar.</p>
+        <p class="section-lead">Instalas una sola cosa y después copias un prompt por paso: Claude instala lo demás, escribe el guion, pone la voz, arma la animación 3D con subtítulos y te entrega el .mp4.</p>
         <ul class="meta">
           <li><Icon name="clock" size={18} />15 min</li>
           <li><Icon name="windows-logo" size={18} />Windows</li>
           <li><Icon name="student" size={18} />Principiante</li>
         </ul>
+        <nav class="toc" aria-label="En esta guía">
+          <a href="#antes">Antes de empezar</a>
+          {pasos.map((p, i) => <a href={`#${p.id}`}>{i + 1}. {p.title}</a>)}
+          <a href="#ajustes">Ajustes</a>
+          <a href="#prompt">Todo en un mensaje</a>
+        </nav>
       </div>
       <figure class="tile sample">
         <Image src={ejemplo} alt="Portada de un short hecho así: ¿cuánto tardas en cruzar la Tierra?" widths={[300, 450, 600]} sizes="(max-width: 767px) 70vw, 300px" loading="eager" />
@@ -99,21 +144,28 @@ Si falta instalar algo, instálalo tú o dame el comando exacto para PowerShell.
       </figure>
     </header>
 
-    <section class="section" aria-labelledby="h-herr">
-      <h2 class="section-title" id="h-herr">Lo que necesitas</h2>
-      <p class="section-lead">Cuatro herramientas. Todas gratis menos Claude, que pide plan Pro. Los comandos son para Windows (PowerShell).</p>
+    <section class="section" id="antes" aria-labelledby="h-antes">
+      <h2 class="section-title" id="h-antes">Antes de empezar</h2>
+      <p class="section-lead">Lo único que instalas tú es Claude Code. Necesitas una cuenta de Claude con plan Pro o superior.</p>
+      <ol class="setup">
+        <li>Abre <strong>PowerShell</strong> (búscalo en el menú Inicio) y pega este comando:
+          <div class="cmd">
+            <code id="cmd-claude">{instalarClaude}</code>
+            <CopyButton target="cmd-claude" what="el comando para instalar Claude Code" />
+          </div>
+        </li>
+        <li>Crea una carpeta para tu video, por ejemplo <code>C:\videos\mi-primer-short</code>, y ábrela en PowerShell.</li>
+        <li>Escribe <code>claude</code> y presiona Enter. La primera vez te pide iniciar sesión con tu cuenta.</li>
+      </ol>
+
+      <h3 class="sub">Qué hace cada herramienta</h3>
       <div class="tools">
         {herramientas.map((h) => (
           <article class="tile tool">
-            <Icon name={h.icon} size={28} class="tool-icon" />
-            <div class="tool-body">
-              <h3>{h.name}</h3>
+            <Icon name={h.icon} size={26} class="tool-icon" />
+            <div>
+              <h4>{h.name}</h4>
               <p class="muted">{h.what}</p>
-              <div class="cmd">
-                <code id={`cmd-${h.id}`}>{h.install}</code>
-                <CopyButton target={`cmd-${h.id}`} what={`el comando para instalar ${h.name}`} />
-              </div>
-              {h.link && <a class="ink-link" href={h.link.href} target="_blank" rel="noopener">{h.link.label}</a>}
             </div>
           </article>
         ))}
@@ -121,27 +173,58 @@ Si falta instalar algo, instálalo tú o dame el comando exacto para PowerShell.
     </section>
 
     <section class="section" aria-labelledby="h-pasos">
-      <h2 class="section-title" id="h-pasos">Paso a paso</h2>
+      <h2 class="section-title" id="h-pasos">Un prompt por paso</h2>
+      <p class="section-lead">Pega cada prompt en Claude, espera a que termine y revisa antes de pasar al siguiente. Cambia solo lo que está entre corchetes.</p>
       <ol class="steps">
         {pasos.map((p, i) => (
-          <li>
-            <span class="step-n" aria-hidden="true">{i + 1}</span>
-            <h3>{p.title}</h3>
-            <p class="muted">{p.text}</p>
+          <li class="tile step" id={p.id}>
+            <div class="step-head">
+              <span class="step-n" aria-hidden="true">{i + 1}</span>
+              <div>
+                <h3>{p.title}</h3>
+                <p class="muted">{p.why}</p>
+              </div>
+            </div>
+            <div class="prompt">
+              <div class="prompt-bar">
+                <span>Prompt {i + 1}</span>
+                <CopyButton target={`prompt-${p.id}`} what={`el prompt del paso ${p.title}`} label="Copiar prompt" />
+              </div>
+              <pre tabindex="0"><code id={`prompt-${p.id}`}>{p.prompt}</code></pre>
+            </div>
+            <div class="tips">
+              <h4><Icon name="lightbulb" size={18} />Recomendaciones</h4>
+              <ul>
+                {p.tips.map((t) => <li>{t}</li>)}
+              </ul>
+            </div>
           </li>
         ))}
       </ol>
     </section>
 
+    <section class="section" id="ajustes" aria-labelledby="h-ajustes">
+      <h2 class="section-title" id="h-ajustes">Ajustes</h2>
+      <p class="section-lead">Cuando tengas el video, pide los cambios de a uno. Algunos que funcionan bien:</p>
+      <ul class="tweaks">
+        {ajustes.map((a, i) => (
+          <li class="tile">
+            <code id={`ajuste-${i}`}>{a}</code>
+            <CopyButton target={`ajuste-${i}`} what={`el ajuste: ${a}`} />
+          </li>
+        ))}
+      </ul>
+    </section>
+
     <section class="section" id="prompt" aria-labelledby="h-prompt">
-      <h2 class="section-title" id="h-prompt">El prompt</h2>
-      <p class="section-lead">Cópialo tal cual y cambia solo lo que está entre corchetes. Ideas que funcionan: «¿por qué el mar es salado?», «qué pasa si cavas un túnel al centro de la Tierra», «cómo se hace un chip».</p>
-      <div class="tile prompt">
+      <h2 class="section-title" id="h-prompt">Atajo: todo en un mensaje</h2>
+      <p class="section-lead">Si prefieres no ir paso a paso, este prompt hace todo de una vez. Igual se detiene para que apruebes el guion.</p>
+      <div class="tile prompt big">
         <div class="prompt-bar">
           <span>prompt.txt</span>
-          <CopyButton target="prompt-text" what="el prompt" label="Copiar prompt" />
+          <CopyButton target="prompt-text" what="el prompt completo" label="Copiar prompt" />
         </div>
-        <pre tabindex="0"><code id="prompt-text">{prompt}</code></pre>
+        <pre tabindex="0"><code id="prompt-text">{todoEnUno}</code></pre>
       </div>
       <p class="note muted">Es un punto de partida. El que uso en mis videos agrega música, efectos de sonido y reglas para que la gente no deslice; lo comparto en el Discord.</p>
     </section>
@@ -184,6 +267,20 @@ Si falta instalar algo, instálalo tú o dame el comando exacto para PowerShell.
     font-size: 0.875rem;
   }
 
+  .toc {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 18px;
+    margin-top: 24px;
+    font-weight: 600;
+    font-size: 0.9375rem;
+  }
+
+  .toc a {
+    color: var(--color-cyan-ink);
+    text-underline-offset: 3px;
+  }
+
   .sample {
     overflow: hidden;
   }
@@ -202,35 +299,39 @@ Si falta instalar algo, instálalo tú o dame el comando exacto para PowerShell.
 
   h3 {
     font-weight: 700;
-    font-size: 1.25rem;
-    letter-spacing: -0.01em;
+    font-size: 1.375rem;
+    letter-spacing: -0.015em;
     line-height: 1.3;
   }
 
-  .tools {
+  h4 {
+    font-weight: 700;
+    font-size: 1.125rem;
+    line-height: 1.3;
+  }
+
+  code {
+    font-family: ui-monospace, 'Cascadia Code', Consolas, monospace;
+    font-size: 0.9em;
+  }
+
+  .setup {
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: minmax(0, 1fr);
     gap: 16px;
-    margin-top: 32px;
+    margin-top: 28px;
+    padding-left: 1.4em;
+    max-width: 760px;
   }
 
-  .tool {
-    display: grid;
-    grid-template-columns: auto minmax(0, 1fr);
-    gap: 16px;
-    padding: 28px 30px;
+  .setup li::marker {
+    font-weight: 700;
   }
 
-  .tool :global(.tool-icon) {
-    color: var(--color-green-ink);
-    margin-top: 2px;
-  }
-
-  .tool-body {
-    min-width: 0;
-    display: grid;
-    gap: 10px;
-    align-content: start;
+  .setup > li > code {
+    padding: 2px 8px;
+    border-radius: 8px;
+    background: var(--color-tile);
   }
 
   .cmd {
@@ -238,9 +339,9 @@ Si falta instalar algo, instálalo tú o dame el comando exacto para PowerShell.
     display: flex;
     align-items: center;
     gap: 10px;
-    margin-top: 6px;
+    margin-top: 10px;
     padding: 8px 8px 8px 16px;
-    background: var(--color-bg);
+    background: var(--color-tile);
     border-radius: 999px;
   }
 
@@ -249,14 +350,35 @@ Si falta instalar algo, instálalo tú o dame el comando exacto para PowerShell.
     min-width: 0;
     overflow-x: auto;
     white-space: nowrap;
-    font-family: ui-monospace, 'Cascadia Code', Consolas, monospace;
     font-size: 0.875rem;
     scrollbar-width: thin;
   }
 
-  .ink-link {
-    color: var(--color-cyan-ink);
-    font-weight: 600;
+  .sub {
+    margin-top: 48px;
+  }
+
+  .tools {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 16px;
+    margin-top: 20px;
+  }
+
+  .tool {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: 14px;
+    padding: 22px 24px;
+  }
+
+  .tool :global(.tool-icon) {
+    color: var(--color-green-ink);
+    margin-top: 2px;
+  }
+
+  .tool p {
+    margin-top: 6px;
     font-size: 0.9375rem;
   }
 
@@ -265,14 +387,29 @@ Si falta instalar algo, instálalo tú o dame el comando exacto para PowerShell.
     padding: 0;
     margin-top: 32px;
     display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 32px;
+    gap: 16px;
   }
 
-  .steps li {
+  .step {
     display: grid;
-    gap: 10px;
-    align-content: start;
+    grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
+    grid-template-areas: 'head head' 'prompt tips';
+    gap: 24px 32px;
+    padding: clamp(24px, 3vw, 36px);
+    scroll-margin-top: 96px;
+  }
+
+  .step-head {
+    grid-area: head;
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: 16px;
+    align-items: start;
+  }
+
+  .step-head p {
+    margin-top: 4px;
+    max-width: 62ch;
   }
 
   .step-n {
@@ -287,8 +424,11 @@ Si falta instalar algo, instálalo tú o dame el comando exacto para PowerShell.
     font-variant-numeric: tabular-nums;
   }
 
-  .prompt {
-    margin-top: 32px;
+  .step .prompt {
+    grid-area: prompt;
+    min-width: 0;
+    background: var(--color-bg);
+    border-radius: var(--radius-media);
   }
 
   .prompt-bar {
@@ -296,7 +436,7 @@ Si falta instalar algo, instálalo tú o dame el comando exacto para PowerShell.
     align-items: center;
     justify-content: space-between;
     gap: 12px;
-    padding: 14px 16px 14px 24px;
+    padding: 10px 12px 10px 20px;
     border-bottom: 1px solid var(--color-line);
     color: var(--color-muted);
     font-weight: 600;
@@ -304,13 +444,65 @@ Si falta instalar algo, instálalo tú o dame el comando exacto para PowerShell.
   }
 
   .prompt pre {
-    padding: 24px;
+    padding: 20px;
     white-space: pre-wrap;
     overflow-wrap: anywhere;
     font-family: ui-monospace, 'Cascadia Code', Consolas, monospace;
-    font-size: 0.9375rem;
+    font-size: 0.9rem;
     line-height: 1.65;
-    border-radius: 0 0 var(--radius-tile) var(--radius-tile);
+  }
+
+  .tips {
+    grid-area: tips;
+    align-self: start;
+  }
+
+  .tips h4 {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--color-green-ink);
+    font-size: 1rem;
+  }
+
+  .tips ul {
+    display: grid;
+    gap: 10px;
+    margin-top: 12px;
+    padding-left: 1.1em;
+    color: var(--color-muted);
+    font-size: 0.9875rem;
+  }
+
+  .tweaks {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+    margin-top: 24px;
+  }
+
+  .tweaks li {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 14px 14px 14px 22px;
+  }
+
+  .tweaks code {
+    min-width: 0;
+    font-size: 0.9375rem;
+  }
+
+  .prompt.big {
+    margin-top: 32px;
+  }
+
+  .big pre {
+    padding: 24px;
+    font-size: 0.9375rem;
   }
 
   .note {
@@ -320,12 +512,12 @@ Si falta instalar algo, instálalo tú o dame el comando exacto para PowerShell.
 
   @media (max-width: 1099px) {
     .tools {
-      grid-template-columns: minmax(0, 1fr);
+      grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 
-    .steps {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      row-gap: 36px;
+    .step {
+      grid-template-columns: minmax(0, 1fr);
+      grid-template-areas: 'head' 'prompt' 'tips';
     }
   }
 
@@ -339,21 +531,22 @@ Si falta instalar algo, instálalo tú o dame el comando exacto para PowerShell.
       max-width: 320px;
     }
 
-    .tools {
+    .tools,
+    .tweaks {
+      grid-template-columns: minmax(0, 1fr);
       gap: 12px;
     }
 
     .tool {
-      padding: 24px;
-      grid-template-columns: minmax(0, 1fr);
+      padding: 20px;
     }
 
-    .steps {
-      grid-template-columns: minmax(0, 1fr);
+    .step {
+      padding: 20px;
     }
 
     .prompt pre {
-      padding: 20px;
+      padding: 16px;
       font-size: 0.875rem;
     }
   }

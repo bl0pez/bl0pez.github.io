@@ -25,7 +25,7 @@ export const categorias: Categoria[] = [
       {
         slug: 'short-3d-con-ia',
         title: 'Tu primer short 3D con Claude Code',
-        summary: 'Las herramientas que necesitas, cómo instalarlas y el prompt para que Claude haga el video por ti.',
+        summary: 'Instalas una sola cosa y copias un prompt por paso: Claude instala lo demás y hace el video contigo.',
         minutes: 15,
         nivel: 'Principiante',
       },
