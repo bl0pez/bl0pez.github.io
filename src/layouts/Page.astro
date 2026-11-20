@@ -1,0 +1,22 @@
+---
+// Marco común de todas las páginas: cabecera, contenido y pie.
+import Base from './Base.astro';
+import SiteHeader from '../components/SiteHeader.astro';
+import SiteFooter from '../components/SiteFooter.astro';
+
+interface Props {
+  title: string;
+  description: string;
+  current?: 'inicio' | 'tutoriales' | 'consejos';
+}
+
+const { title, description, current } = Astro.props;
+---
+
+<Base title={title} description={description}>
+  <SiteHeader current={current} />
+  <main id="contenido">
+    <slot />
+  </main>
+  <SiteFooter />
+</Base>

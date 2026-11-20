@@ -1,0 +1,68 @@
+---
+// Ruta de migas: <nav> + <ol>, la página actual es un enlace con aria-current y los separadores salen del CSS.
+interface Props {
+  items: { href: string; label: string }[];
+}
+
+const { items } = Astro.props;
+---
+
+<nav class="breadcrumb" aria-label="Ruta">
+  <ol>
+    {items.map((it, i) => (
+      <li>
+        <a href={it.href} aria-current={i === items.length - 1 ? 'page' : undefined}>{it.label}</a>
+      </li>
+    ))}
+  </ol>
+</nav>
+
+<style>
+  .breadcrumb > ol {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    list-style: none;
+    padding: 0;
+    font-size: 0.9375rem;
+    font-weight: 500;
+  }
+
+  .breadcrumb > ol > li {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .breadcrumb > ol > li + li::before {
+    content: '›' / '';
+    color: var(--color-muted);
+  }
+
+  .breadcrumb a {
+    color: var(--color-muted);
+    text-decoration: underline;
+    text-decoration-color: var(--color-line);
+    text-underline-offset: 3px;
+  }
+
+  .breadcrumb a[aria-current='page'] {
+    color: var(--color-ink);
+    font-weight: 700;
+    text-decoration: none;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .breadcrumb a:hover {
+      color: var(--color-ink);
+      text-decoration-color: currentColor;
+    }
+  }
+
+  @media (forced-colors: active) {
+    .breadcrumb a[aria-current='page'] {
+      text-decoration: underline;
+    }
+  }
+</style>

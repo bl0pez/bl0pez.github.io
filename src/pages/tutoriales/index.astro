@@ -1,89 +1,59 @@
 ---
-import Base from '../../layouts/Base.astro';
+import Page from '../../layouts/Page.astro';
 import Icon from '../../components/Icon.astro';
-import SiteHeader from '../../components/SiteHeader.astro';
-import SiteFooter from '../../components/SiteFooter.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import GuideCard from '../../components/GuideCard.astro';
+import DiscordBand from '../../components/DiscordBand.astro';
 import { categorias } from '../../data/tutoriales';
-import { DISCORD } from '../../data/links';
 ---
 
-<Base
+<Page
   title="Tutoriales: videos con IA, Roblox y webs | Bryan López"
   description="Guías gratis y en español para crear shorts con Claude Code, juegos en Roblox y webs con IA. Herramientas, instalación y prompts listos para copiar."
+  current="tutoriales"
 >
-  <SiteHeader current="tutoriales" />
+  <div class="wrap intro">
+    <Breadcrumbs items={[{ href: '/', label: 'Inicio' }, { href: '/tutoriales/', label: 'Tutoriales' }]} />
+    <h1 class="page-title">Tutoriales</h1>
+    <p class="section-lead">Lo que uso para hacer mis videos, juegos y webs, explicado para que lo hagas tú. Gratis, en español y con los prompts listos para copiar.</p>
+  </div>
 
-  <main id="contenido" class="wrap">
-    <section class="intro">
-      <h1>Tutoriales</h1>
-      <p class="section-lead">Lo que uso para hacer mis videos, juegos y webs, explicado para que lo hagas tú. Gratis, en español y con los prompts listos para copiar.</p>
-    </section>
-
-    <section class="cats" aria-label="Categorías">
-      {categorias.map((cat) => (
-        <article class="tile cat" id={cat.id}>
-          <div class="cat-head">
-            <Icon name={cat.icon} size={28} class="cat-icon" />
-            <div>
-              <h2>{cat.title}</h2>
-              <p class="muted">{cat.text}</p>
-            </div>
+  <div class="wrap cats">
+    {categorias.map((cat) => (
+      <section class="tile cat" id={cat.id} aria-labelledby={`h-${cat.id}`}>
+        <div class="cat-head">
+          <Icon name={cat.icon} size={28} class="cat-icon" />
+          <div>
+            <h2 id={`h-${cat.id}`}>{cat.title}</h2>
+            <p class="muted">{cat.text}</p>
           </div>
-          {cat.tutoriales.length > 0 ? (
-            <ul class="guides">
-              {cat.tutoriales.map((t) => (
-                <li>
-                  <a href={`/tutoriales/${t.slug}/`}>
-                    <span class="guide-title">{t.title}</span>
-                    <span class="muted">{t.summary}</span>
-                    <span class="guide-meta">{t.minutes} min <Icon name="arrow-right" size={16} /></span>
-                  </a>
-                </li>
-              ))}
-            </ul>
-          ) : (
-            <p class="soon">Próximamente</p>
-          )}
-        </article>
-      ))}
-    </section>
+        </div>
+        {cat.tutoriales.length > 0 ? (
+          <div class="guides">
+            {cat.tutoriales.map((t) => <GuideCard tutorial={t} />)}
+          </div>
+        ) : (
+          <p class="soon">Próximamente</p>
+        )}
+      </section>
+    ))}
+  </div>
 
-    <section class="section">
-      <div class="band">
-        <h2>¿Te trabaste en algún paso?</h2>
-        <p>En el Discord respondo dudas, comparto los prompts nuevos y avisamos cuando sale un tutorial.</p>
-        <a class="btn btn-brand" href={DISCORD} target="_blank" rel="noopener">
-          <Icon name="discord-logo" size={20} />Entrar al Discord
-        </a>
-      </div>
-    </section>
-  </main>
-
-  <SiteFooter />
-</Base>
+  <DiscordBand />
+</Page>
 
 <style>
   .intro {
-    padding-top: clamp(40px, 7vw, 88px);
-  }
-
-  h1 {
-    font-weight: 800;
-    font-size: clamp(2.75rem, 6.6vw, 6rem);
-    line-height: 0.95;
-    letter-spacing: -0.04em;
+    display: grid;
+    gap: 20px;
+    padding-top: clamp(28px, 5vw, 56px);
   }
 
   .cats {
     display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 16px;
     margin-top: clamp(32px, 5vw, 56px);
-  }
-
-  .tile {
-    background: var(--color-tile);
-    border-radius: var(--radius-tile);
   }
 
   .cat {
@@ -91,6 +61,7 @@ import { DISCORD } from '../../data/links';
     flex-direction: column;
     gap: 24px;
     padding: 28px 30px;
+    scroll-margin-top: 96px;
   }
 
   .cat-head {
@@ -111,46 +82,10 @@ import { DISCORD } from '../../data/links';
     line-height: 1.3;
   }
 
-  .muted {
-    color: var(--color-muted);
-  }
-
   .guides {
-    list-style: none;
-    padding: 0;
-    margin-top: auto;
     display: grid;
     gap: 12px;
-  }
-
-  .guides a {
-    display: grid;
-    gap: 6px;
-    padding: 18px 20px;
-    border: 1px solid var(--color-line);
-    border-radius: var(--radius-media);
-    text-decoration: none;
-    transition: border-color 200ms ease;
-  }
-
-  .guide-title {
-    font-weight: 700;
-    font-size: 1.125rem;
-  }
-
-  .guide-meta {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    color: var(--color-cyan-ink);
-    font-weight: 600;
-    font-size: 0.9375rem;
-  }
-
-  @media (hover: hover) and (pointer: fine) {
-    .guides a:hover {
-      border-color: var(--color-ink);
-    }
+    margin-top: auto;
   }
 
   .soon {
@@ -164,36 +99,7 @@ import { DISCORD } from '../../data/links';
     font-size: 0.875rem;
   }
 
-  .band {
-    background: var(--gradient-brand);
-    color: var(--color-on-brand);
-    border-radius: var(--radius-tile);
-    padding: clamp(36px, 6vw, 80px);
-    display: grid;
-    justify-items: start;
-    gap: 18px;
-  }
-
-  .band h2 {
-    font-weight: 800;
-    font-size: clamp(2.25rem, 5vw, 4rem);
-    line-height: 0.98;
-    letter-spacing: -0.04em;
-    max-width: 14ch;
-  }
-
-  .band p {
-    font-size: 1.25rem;
-    max-width: 48ch;
-  }
-
-  .btn-brand {
-    background: var(--color-on-brand);
-    color: var(--color-on-dark);
-    margin-top: 8px;
-  }
-
-  @media (max-width: 1099px) {
+  @media (max-width: 899px) {
     .cats {
       grid-template-columns: minmax(0, 1fr);
     }

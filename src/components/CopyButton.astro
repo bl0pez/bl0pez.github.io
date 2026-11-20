@@ -1,0 +1,141 @@
+---
+// Botón "Copiar" que copia el texto de otro elemento (por id).
+// Usa Invoker Commands (command="--copy" + commandfor) con un click de respaldo para navegadores sin CommandEvent.
+// La burbuja role="status" es a la vez el aviso visible y la región que leen los lectores de pantalla.
+import Icon from './Icon.astro';
+
+interface Props {
+  target: string;
+  /** Qué se copia, para el lector de pantalla: "Copiar comando de Node.js". */
+  what: string;
+  label?: string;
+}
+
+const { target, what, label = 'Copiar' } = Astro.props;
+---
+
+<span class="copy">
+  <button type="button" class="copy-button" command="--copy" commandfor={target}>
+    <span class="i-copy" aria-hidden="true"><Icon name="copy" size={18} /></span>
+    <span class="i-ok" aria-hidden="true"><Icon name="check" size={18} /></span>
+    <span>{label}<span class="sr-only"> {what}</span></span>
+  </button>
+  <span class="tip" role="status"></span>
+</span>
+
+<script>
+  const timers = new WeakMap<Element, number>();
+  let lastMessage = '';
+
+  function report(button: HTMLElement, ok: boolean) {
+    const tip = button.nextElementSibling as HTMLElement;
+    clearTimeout(timers.get(button));
+    button.removeAttribute('data-copied');
+    button.removeAttribute('data-failed');
+    let message = ok ? 'Copiado' : 'No se pudo copiar';
+    if (message === lastMessage) message += ' ';
+    lastMessage = message;
+    tip.textContent = '';
+    void button.offsetWidth;
+    button.setAttribute(ok ? 'data-copied' : 'data-failed', '');
+    requestAnimationFrame(() => (tip.textContent = message));
+    timers.set(button, window.setTimeout(() => {
+      button.removeAttribute('data-copied');
+      button.removeAttribute('data-failed');
+      tip.textContent = '';
+    }, 2000));
+  }
+
+  async function copy(button: HTMLElement, target: HTMLElement) {
+    const text = target.innerText.trim();
+    if (!text) return;
+    try {
+      await navigator.clipboard.writeText(text);
+      report(button, true);
+    } catch {
+      report(button, false);
+    }
+  }
+
+  if ('CommandEvent' in window) {
+    document.addEventListener('command', (event: any) => {
+      if (event.command === '--copy') copy(event.source, event.target);
+    }, true);
+  } else {
+    document.addEventListener('click', (event) => {
+      const button = (event.target as Element).closest<HTMLElement>('button[command="--copy"]');
+      if (!button) return;
+      const target = document.getElementById(button.getAttribute('commandfor') ?? '');
+      if (target) copy(button, target);
+    });
+  }
+</script>
+
+<style>
+  .copy {
+    position: relative;
+    flex: none;
+  }
+
+  .copy-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    min-inline-size: 24px;
+    min-block-size: 36px;
+    font: inherit;
+    font-weight: 600;
+    font-size: 0.875rem;
+    padding: 8px 14px;
+    border-radius: 999px;
+    border: 1px solid var(--color-line);
+    background: var(--color-tile);
+    color: var(--color-ink);
+    cursor: pointer;
+    transition: transform 160ms var(--ease-out), border-color 200ms ease;
+  }
+
+  .copy-button:active {
+    transform: scale(0.97);
+  }
+
+  .i-ok,
+  .copy-button[data-copied] .i-copy {
+    display: none;
+  }
+
+  .copy-button[data-copied] .i-ok {
+    display: inline-flex;
+    color: var(--color-green-ink);
+  }
+
+  .i-copy {
+    display: inline-flex;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .copy-button:hover {
+      border-color: var(--color-ink);
+    }
+  }
+
+  .tip {
+    position: absolute;
+    inset-block-end: calc(100% + 8px);
+    inset-inline-end: 0;
+    padding: 6px 10px;
+    border-radius: 999px;
+    background: var(--color-ink);
+    color: var(--color-bg);
+    font-size: 0.8125rem;
+    font-weight: 600;
+    white-space: nowrap;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 150ms ease;
+  }
+
+  .copy-button:is([data-copied], [data-failed]) + .tip {
+    opacity: 1;
+  }
+</style>

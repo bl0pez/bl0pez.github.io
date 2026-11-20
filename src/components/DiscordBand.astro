@@ -1,0 +1,24 @@
+---
+import Icon from './Icon.astro';
+import { DISCORD } from '../data/links';
+
+interface Props {
+  title?: string;
+  text?: string;
+}
+
+const {
+  title = '¿Te trabaste en algún paso?',
+  text = 'En el Discord respondo dudas, comparto los prompts nuevos y aviso cuando sale un tutorial.',
+} = Astro.props;
+---
+
+<section class="wrap section" aria-labelledby="h-discord">
+  <div class="band">
+    <h2 id="h-discord">{title}</h2>
+    <p>{text}</p>
+    <a class="btn btn-brand" href={DISCORD} target="_blank" rel="noopener">
+      <Icon name="discord-logo" size={20} />Entrar al Discord
+    </a>
+  </div>
+</section>

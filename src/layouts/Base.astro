@@ -12,81 +12,54 @@ const { title, description, noindex = false } = Astro.props;
 const canonical = new URL(Astro.url.pathname, Astro.site).href;
 const ogImage = new URL('/og.png', Astro.site).href;
 
-// Datos estructurados: le dicen a Google qué es el sitio, a quién pertenece y dónde atiende.
+// Datos estructurados: un sitio de tutoriales escrito por una persona.
 const jsonLd = {
   '@context': 'https://schema.org',
   '@graph': [
     {
-      '@type': 'ProfessionalService',
-      '@id': `${Astro.site}#negocio`,
-      name: 'Bryan López · Desarrollo web y apps',
+      '@type': 'WebSite',
+      '@id': `${Astro.site}#sitio`,
+      name: 'Bryan López · Tutoriales de IA',
       url: Astro.site?.href,
-      logo: new URL('/logo.png', Astro.site).href,
-      image: ogImage,
-      description,
-      telephone: '+56994879144',
-      email: 'bryanlopezdev@gmail.com',
-      address: {
-        '@type': 'PostalAddress',
-        addressLocality: 'Arica',
-        addressRegion: 'Arica y Parinacota',
-        addressCountry: 'CL',
-      },
-      areaServed: [
-        { '@type': 'City', name: 'Arica' },
-        { '@type': 'Country', name: 'Chile' },
-      ],
-      knowsAbout: [
-        'Desarrollo web',
-        'Páginas web',
-        'Aplicaciones web',
-        'Reservas online',
-        'Tiendas online',
-        'Automatización con n8n',
-        'Bots de WhatsApp',
-        'Asistentes con inteligencia artificial',
-        'Integraciones MCP con ChatGPT y Claude',
-      ],
-      founder: { '@id': `${Astro.site}#bryan` },
+      inLanguage: 'es',
+      description: 'Tutoriales, consejos y prompts para crear videos, juegos y webs con inteligencia artificial.',
+      publisher: { '@id': `${Astro.site}#bryan` },
     },
     {
       '@type': 'Person',
       '@id': `${Astro.site}#bryan`,
       name: 'Bryan López',
-      jobTitle: 'Desarrollador web y de aplicaciones',
       url: Astro.site?.href,
+      image: new URL('/logo.png', Astro.site).href,
       sameAs: ['https://github.com/bl0pez', 'https://www.linkedin.com/in/bryan-lopez-sanchez'],
-      address: { '@type': 'PostalAddress', addressLocality: 'Arica', addressCountry: 'CL' },
     },
   ],
 };
 ---
 
 <!doctype html>
-<html lang="es-CL">
+<html lang="es">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="light dark" />
     <title>{title}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
     {noindex && <meta name="robots" content="noindex" />}
     <meta name="author" content="Bryan López" />
-    <meta name="geo.region" content="CL-AP" />
-    <meta name="geo.placename" content="Arica" />
     <meta name="theme-color" content="#eef1f0" media="(prefers-color-scheme: light)" />
     <meta name="theme-color" content="#0e1214" media="(prefers-color-scheme: dark)" />
 
     <meta property="og:type" content="website" />
     <meta property="og:locale" content="es_CL" />
-    <meta property="og:site_name" content="Bryan López" />
+    <meta property="og:site_name" content="Bryan López · Tutoriales de IA" />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
     <meta property="og:image" content={ogImage} />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
-    <meta property="og:image:alt" content="Bryan López: webs y apps que traen clientes, desde Arica" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />

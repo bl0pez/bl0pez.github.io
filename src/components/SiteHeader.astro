@@ -1,32 +1,32 @@
 ---
-// Cabecera de las páginas internas (tutoriales). Misma forma que la de la portada,
-// con enlaces que vuelven a las secciones de la portada.
 import Icon from './Icon.astro';
+import { DISCORD } from '../data/links';
 
 interface Props {
-  current?: 'tutoriales';
+  current?: 'inicio' | 'tutoriales' | 'consejos';
 }
 
 const { current } = Astro.props;
-const whatsapp =
-  'https://wa.me/56994879144?text=' +
-  encodeURIComponent('Hola Bryan, vi tu portafolio y quiero conversar sobre mi negocio.');
+const links = [
+  { href: '/tutoriales/', label: 'Tutoriales', id: 'tutoriales' },
+  { href: '/#consejos', label: 'Consejos', id: 'consejos' },
+];
 ---
 
 <a class="skip" href="#contenido">Saltar al contenido</a>
 <header class="top">
   <div class="wrap top-inner">
-    <a class="brand" href="/" aria-label="Bryan López, inicio">
+    <a class="brand" href="/" aria-label="Bryan López, inicio" aria-current={current === 'inicio' ? 'page' : undefined}>
       <span class="brand-mark" aria-hidden="true"><span class="c">&lt;</span>BL<span class="g">&gt;</span></span>
       <span class="brand-name">Bryan López</span>
     </a>
     <nav class="nav" aria-label="Secciones">
-      <a href="/#trabajos">Trabajos</a>
-      <a href="/#servicios">Servicios</a>
-      <a href="/tutoriales/" aria-current={current === 'tutoriales' ? 'page' : undefined}>Tutoriales</a>
+      {links.map((l) => (
+        <a href={l.href} aria-current={current === l.id ? 'page' : undefined}>{l.label}</a>
+      ))}
     </nav>
-    <a class="btn btn-primary btn-sm" href={whatsapp} target="_blank" rel="noopener">
-      <Icon name="whatsapp-logo" size={18} />Escríbeme
+    <a class="btn btn-primary btn-sm" href={DISCORD} target="_blank" rel="noopener">
+      <Icon name="discord-logo" size={18} />Discord
     </a>
   </div>
 </header>
@@ -37,6 +37,7 @@ const whatsapp =
     top: 0;
     z-index: 10;
     background: color-mix(in oklab, var(--color-bg) 94%, transparent);
+    backdrop-filter: blur(10px);
   }
 
   .top-inner {
@@ -79,6 +80,7 @@ const whatsapp =
 
   .nav a[aria-current='page'] {
     color: var(--color-ink);
+    font-weight: 700;
   }
 
   @media (hover: hover) and (pointer: fine) {
@@ -97,12 +99,19 @@ const whatsapp =
       display: none;
     }
 
-    .nav a:not([href='/tutoriales/']) {
-      display: none;
+    .top-inner {
+      gap: 16px;
     }
 
-    .top-inner {
-      gap: 18px;
+    .nav {
+      gap: 16px;
+    }
+  }
+
+  /* Celulares angostos: queda la marca, Tutoriales y Discord. */
+  @media (max-width: 439px) {
+    .nav a[href='/#consejos'] {
+      display: none;
     }
   }
 </style>
